@@ -8,8 +8,8 @@ namespace Stack_Queue
 {
     public class ArrayBackedStack<T>
     {
-        public GenericList<T> items;
-
+        private GenericList<T> items;
+        public int Count { get { return items.Count; } }
         public ArrayBackedStack(int capacity = 10)
         {
             items = new GenericList<T>(capacity);
@@ -20,13 +20,13 @@ namespace Stack_Queue
         }
         public T Pop() 
         {
-            T temp = items.GetIndex(items.insertIndex - 1);
+            T temp = items.GetIndex(items.Count - 1);
             items.Remove(temp);
             return temp;
         }
         public T Peek() 
         {
-            T temp = items.GetIndex(items.insertIndex - 1);
+            T temp = items.GetIndex(items.Count - 1);
             return temp;
         }
         public void Clear() 
@@ -35,7 +35,7 @@ namespace Stack_Queue
         }
         public bool IsEmpty()
         {
-            if(items.insertIndex == 0)
+            if(items.Count == 0)
             {
                 return true;
             }

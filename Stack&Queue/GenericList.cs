@@ -8,8 +8,9 @@ namespace Stack_Queue
 {
     public class GenericList<T>
     {
-        public T[] Items;
-        public int insertIndex;
+        private T[] Items;
+        private int insertIndex;
+        public int Count { get { return insertIndex; } }
         public GenericList(int size = 10)
         {
             Items = new T[size];
@@ -50,7 +51,7 @@ namespace Stack_Queue
             int index = -1;
             for (int i = 0; i < insertIndex; i++)
             {
-                if (Items[i].Equals(item))
+                if (object.Equals(Items[i], item))
                 {
                     index = i;
                     break;
