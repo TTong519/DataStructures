@@ -1,6 +1,6 @@
 ﻿namespace Stack_Queue
 {
-    class ArrayBackedQueue<T>
+    public class ArrayBackedQueue<T>
     {
         private T[] data = new T[10];
         public int Length { get { return data.Length; } }
