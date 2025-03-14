@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stack_Queue
+namespace DataStructures.Lists
 {
     public class GenericList<T>
     {
@@ -51,7 +51,7 @@ namespace Stack_Queue
             int index = -1;
             for (int i = 0; i < insertIndex; i++)
             {
-                if (object.Equals(Items[i], item))
+                if (Equals(Items[i], item))
                 {
                     index = i;
                     break;

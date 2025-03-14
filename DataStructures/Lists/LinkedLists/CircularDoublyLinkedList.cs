@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stack_Queue
+namespace DataStructures.Lists.LinkedLists
 {
     public class CircularDoublyLinkedList<T>
     {
@@ -109,7 +109,7 @@ namespace Stack_Queue
         public bool Remove(T value)
         {
             DoublyLinkedNode<T> current = Head!;
-            if(object.Equals(current.Value, value))
+            if(Equals(current.Value, value))
             {
                 current.Previous.Next = current.Next;
                 current.Next.Previous = current.Previous;
@@ -118,7 +118,7 @@ namespace Stack_Queue
             }
             for (int i = 0; i < Count; i++)
             {
-                if (object.Equals(current.Value, value))
+                if (Equals(current.Value, value))
                 {
                     current.Previous.Next = current.Next;
                     current.Next.Previous = current.Previous;
@@ -161,7 +161,7 @@ namespace Stack_Queue
         }
         public bool Contains(DoublyLinkedNode<T> node)
         {
-            return (node.Owner == this);
+            return node.Owner == this;
         }
     }
 }

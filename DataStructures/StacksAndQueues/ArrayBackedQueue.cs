@@ -1,4 +1,4 @@
-﻿namespace Stack_Queue
+﻿namespace DataStructures.StacksAndQueues
 {
     public class ArrayBackedQueue<T>
     {

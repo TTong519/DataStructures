@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DataStructures.Lists.LinkedLists;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Stack_Queue
+namespace DataStructures.Lists
 {
     static class Extensions
     {
@@ -24,7 +25,7 @@ namespace Stack_Queue
                 {
                     if (array[j].CompareTo(array[j - 1]) < 0)
                     {
-                        Swap<TComparable>(array, j, j - 1);
+                        Swap(array, j, j - 1);
                     }
                     else
                     {

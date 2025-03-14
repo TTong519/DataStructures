@@ -1,4 +1,6 @@
-﻿namespace Stack_Queue
+﻿using DataStructures.Lists.LinkedLists;
+
+namespace DataStructures.StacksAndQueues
 {
     class LinkedListBackedQueue<T>
     {

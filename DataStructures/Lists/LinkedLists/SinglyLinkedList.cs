@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Stack_Queue
+namespace DataStructures.Lists.LinkedLists
 {
     public class SinglyLinkedList<T>
     {
