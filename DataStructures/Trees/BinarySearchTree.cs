@@ -1,7 +1,9 @@
-﻿using System;
+﻿using DataStructures.StacksAndQueues;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -86,6 +88,71 @@ namespace DataStructures.Trees
                     current.Values.Add(value);
                     return;
                 }
+            }
+        }
+        public T Minimum()
+        {
+            BinarySearchTreeNode<T> current = Root;
+            while(true)
+            {
+                if(current.Left != null)
+                {
+                    current = current.Left;
+                }
+                else
+                {
+                    return current.Values[0];
+                }
+            }
+        }
+        public T Maximum()
+        {
+            BinarySearchTreeNode<T>? current = Root;
+            while (true)
+            {
+                if (current.Right != null)
+                {
+                    current = current.Right;
+                }
+                else
+                {
+                    return current.Values[0];
+                }
+            }
+        }
+        public List<T> LevelOrderTransversal()
+        {
+            ArrayBackedQueue<BinarySearchTreeNode<T>> toTransverse = new();
+            ArrayBackedQueue<BinarySearchTreeNode<T>> transversed = new();
+            List<T> output = new();
+            toTransverse.Enqueue(Root);
+            while(transversed.Count < Count)
+            {
+                BinarySearchTreeNode<T> current = toTransverse.Dequeue();
+                transversed.Enqueue(current);
+                if (current.Left != null)
+                {
+                    toTransverse.Enqueue(current.Left);
+                }
+                if (current.Right != null)
+                {
+                    toTransverse.Enqueue(current.Right);
+                }
+                foreach(var thing in current.Values)
+                {
+                    output.Add(thing);
+                }
+            }
+            return output;
+        }
+        public List<T> PreOrderTransversal()
+        {
+            ArrayBackedStack<BinarySearchTreeNode<T>> toTransverse = new();
+            ArrayBackedQueue<BinarySearchTreeNode<T>> transversed = new();
+            List<T> output = new();
+            while(transversed.Count < Count)
+            {
+
             }
         }
     }

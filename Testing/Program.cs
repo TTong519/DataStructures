@@ -24,13 +24,18 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            BinarySearchTree<HighScore> Tree = new();
-            Tree.Insert(new(1, "Tyler"));
-            Tree.Insert(new(2, "Tyler"));
-            Tree.Insert(new(0, "Tyler"));
-            Tree.Insert(new(5, "Bob"));
-            Tree.Insert(new(5, "Sally"));
-            var thing = Tree.Search(new(5, "sdklfajsdlfkasjl"));
+            BinarySearchTree<int> Tree = new();
+            Tree.Insert(5);
+            Tree.Insert(4);
+            Tree.Insert(3);
+            Tree.Insert(2);
+            Tree.Insert(1);
+            Tree.Insert(6);
+            Tree.Insert(7);
+            Tree.Insert(8);
+            Tree.Insert(9);
+            Tree.Insert(10);
+            var thing = Tree.LevelOrderTransversal();
             ;
         }
     }
