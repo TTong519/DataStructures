@@ -1,6 +1,7 @@
 ﻿using DataStructures.Lists;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace DataStructures.StacksAndQueues
         }
         public T Pop() 
         {
+            if (items.Count == 0) throw new InvalidOperationException("Stack is empty");
+
             T temp = items.GetIndex(items.Count - 1);
             items.Remove(temp);
             return temp;

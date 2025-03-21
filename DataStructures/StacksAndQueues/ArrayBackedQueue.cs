@@ -35,23 +35,28 @@
         }
         public T Dequeue()
         {
+            if (Count <= 0) throw new InvalidOperationException("no info");
+
             T toReturn = data[head];
-            head++;
             Count--;
+            head++;
+            if (head >= Length)
+            {
+                head = 0;
+            }
+            
             return toReturn;
         }
         public T Peek()
         {
+            if (Count <= 0) throw new InvalidOperationException("no info");
+
             T toReturn = data[head];
             return toReturn;
         }
         public bool IsEmpty()
         {
-            if(Count == 0)
-            {
-                return true;
-            }
-            return false;
+            return Count == 0;
         }
         public void Clear()
         {

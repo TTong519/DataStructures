@@ -26,16 +26,15 @@ namespace Testing
         {
             BinarySearchTree<int> Tree = new();
             Tree.Insert(5);
-            Tree.Insert(4);
-            Tree.Insert(3);
+            Tree.Insert(8);
             Tree.Insert(2);
             Tree.Insert(1);
-            Tree.Insert(6);
-            Tree.Insert(7);
-            Tree.Insert(8);
             Tree.Insert(9);
-            Tree.Insert(10);
-            var thing = Tree.LevelOrderTransversal();
+            Tree.Insert(6);
+            Tree.Insert(4);
+            Tree.Insert(3);
+            Tree.Insert(7);
+            var thing = Tree.LevelOrderTraversal();
             ;
         }
     }

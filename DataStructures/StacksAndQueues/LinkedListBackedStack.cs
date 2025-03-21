@@ -5,7 +5,7 @@ namespace DataStructures.StacksAndQueues
     public class LinkedListBackedStack<T>
     {
         public int Count { get { return data.Count; }}
-        private SinglyLinkedList<T> data;
+        private SinglyLinkedList<T> data = new();
         public LinkedListBackedStack(T value, T next) 
         {
             data.AddFirst(next);

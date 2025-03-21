@@ -11,16 +11,16 @@ namespace DataStructures.Trees
 {
     public class BinarySearchTree<T> where T : IComparable<T>
     {
-        public BinarySearchTreeNode<T>? Root;
+        public BinarySearchTreeNode<T> Root;
         public int Count;
         public BinarySearchTree()
         {
             Count = 0;
             Root = null;
         }
-        public BinarySearchTreeNode<T>? Search(T value)
+        public BinarySearchTreeNode<T> Search(T value)
         {
-            BinarySearchTreeNode<T>? current = Root;
+            BinarySearchTreeNode<T> current = Root;
             while (true)
             {
                 if(current == null)
@@ -107,7 +107,7 @@ namespace DataStructures.Trees
         }
         public T Maximum()
         {
-            BinarySearchTreeNode<T>? current = Root;
+            BinarySearchTreeNode<T> current = Root;
             while (true)
             {
                 if (current.Right != null)
@@ -120,40 +120,64 @@ namespace DataStructures.Trees
                 }
             }
         }
-        public List<T> LevelOrderTransversal()
+        public ArrayBackedQueue<T> LevelOrderTraversal()
         {
-            ArrayBackedQueue<BinarySearchTreeNode<T>> toTransverse = new();
-            ArrayBackedQueue<BinarySearchTreeNode<T>> transversed = new();
-            List<T> output = new();
-            toTransverse.Enqueue(Root);
-            while(transversed.Count < Count)
+            ArrayBackedQueue<BinarySearchTreeNode<T>> toTraverse = new();
+            ArrayBackedQueue<T> traversed = new();
+            toTraverse.Enqueue(Root);
+            while(!toTraverse.IsEmpty())
             {
-                BinarySearchTreeNode<T> current = toTransverse.Dequeue();
-                transversed.Enqueue(current);
-                if (current.Left != null)
-                {
-                    toTransverse.Enqueue(current.Left);
-                }
-                if (current.Right != null)
-                {
-                    toTransverse.Enqueue(current.Right);
-                }
+                BinarySearchTreeNode<T> current = toTraverse.Dequeue();
+                if (current == null) continue;
+
+                toTraverse.Enqueue(current.Left);
+                toTraverse.Enqueue(current.Right);
                 foreach(var thing in current.Values)
                 {
-                    output.Add(thing);
+                    traversed.Enqueue(thing);
                 }
             }
-            return output;
+            return traversed;
         }
-        public List<T> PreOrderTransversal()
+        public ArrayBackedQueue<T> PreOrderTraversal()
         {
             ArrayBackedStack<BinarySearchTreeNode<T>> toTransverse = new();
-            ArrayBackedQueue<BinarySearchTreeNode<T>> transversed = new();
-            List<T> output = new();
-            while(transversed.Count < Count)
+            ArrayBackedQueue<T> traversed = new();
+            toTransverse.Push(Root);
+            while(!toTransverse.IsEmpty())
             {
-
+                BinarySearchTreeNode<T> transversing = toTransverse.Pop();
+                if(transversing != null)
+                {
+                    foreach(var value in transversing.Values)
+                    {
+                        traversed.Enqueue(value);
+                    }
+                    toTransverse.Push(transversing.Right);
+                    toTransverse.Push(transversing.Left);
+                }
             }
+            return traversed;
+        }
+        public ArrayBackedStack<T> PostOrderTraversal()
+        {
+            ArrayBackedStack<BinarySearchTreeNode<T>> toTransverse = new();
+            ArrayBackedStack<T> traversed = new();
+            toTransverse.Push(Root);
+            while (!toTransverse.IsEmpty())
+            {
+                BinarySearchTreeNode<T> transversing = toTransverse.Pop();
+                if (transversing != null)
+                {
+                    foreach (var value in transversing.Values)
+                    {
+                        traversed.Push(value);
+                    }
+                    toTransverse.Push(transversing.Left);
+                    toTransverse.Push(transversing.Right);
+                }
+            }
+            return traversed;
         }
     }
 }
