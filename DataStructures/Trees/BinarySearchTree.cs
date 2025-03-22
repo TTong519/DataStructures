@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -178,6 +180,25 @@ namespace DataStructures.Trees
                 }
             }
             return traversed;
+        }
+        public ArrayBackedQueue<T> InOrderTraversal()
+        {
+            ArrayBackedStack<BinarySearchTreeNode<T>> toTraverse = new();
+            ArrayBackedQueue<T> traversed = new();
+            toTraverse.Push(Root);
+            BinarySearchTreeNode<T> traversing = Root;
+            while(!toTraverse.IsEmpty())
+            {
+                if(traversing != null)
+                {
+                    toTraverse.Push(traversing.Left);
+                    traversing = traversing.Left;
+                }
+                else
+                {
+                    while()
+                }
+            }
         }
     }
 }
