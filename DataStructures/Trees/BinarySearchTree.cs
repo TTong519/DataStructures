@@ -122,12 +122,12 @@ namespace DataStructures.Trees
                 }
             }
         }
-        public ArrayBackedQueue<T> LevelOrderTraversal()
+        public Queue<T> LevelOrderTraversal()
         {
-            ArrayBackedQueue<BinarySearchTreeNode<T>> toTraverse = new();
-            ArrayBackedQueue<T> traversed = new();
+            Queue<BinarySearchTreeNode<T>> toTraverse = new();
+            Queue<T> traversed = new();
             toTraverse.Enqueue(Root);
-            while(!toTraverse.IsEmpty())
+            while(toTraverse.Count != 0)
             {
                 BinarySearchTreeNode<T> current = toTraverse.Dequeue();
                 if (current == null) continue;
@@ -141,12 +141,12 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
-        public ArrayBackedQueue<T> PreOrderTraversal()
+        public Queue<T> PreOrderTraversal()
         {
-            ArrayBackedStack<BinarySearchTreeNode<T>> toTransverse = new();
-            ArrayBackedQueue<T> traversed = new();
+            Stack<BinarySearchTreeNode<T>> toTransverse = new();
+            Queue<T> traversed = new();
             toTransverse.Push(Root);
-            while(!toTransverse.IsEmpty())
+            while(toTransverse.Count != 0)
             {
                 BinarySearchTreeNode<T> transversing = toTransverse.Pop();
                 if(transversing != null)
@@ -161,12 +161,12 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
-        public ArrayBackedStack<T> PostOrderTraversal()
+        public Stack<T> PostOrderTraversal()
         {
-            ArrayBackedStack<BinarySearchTreeNode<T>> toTransverse = new();
-            ArrayBackedStack<T> traversed = new();
+            Stack<BinarySearchTreeNode<T>> toTransverse = new();
+            Stack<T> traversed = new();
             toTransverse.Push(Root);
-            while (!toTransverse.IsEmpty())
+            while (toTransverse.Count != 0)
             {
                 BinarySearchTreeNode<T> transversing = toTransverse.Pop();
                 if (transversing != null)
@@ -181,24 +181,29 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
-        public ArrayBackedQueue<T> InOrderTraversal()
+        public Queue<T> InOrderTraversal()
         {
-            ArrayBackedStack<BinarySearchTreeNode<T>> toTraverse = new();
-            ArrayBackedQueue<T> traversed = new();
-            toTraverse.Push(Root);
+            Stack<BinarySearchTreeNode<T>> Return = new();
+            Queue<T> traversed = new();
             BinarySearchTreeNode<T> traversing = Root;
-            while(!toTraverse.IsEmpty())
+            while(Return.Count != 0 || traversing != null)
             {
                 if(traversing != null)
                 {
-                    toTraverse.Push(traversing.Left);
+                    Return.Push(traversing);
                     traversing = traversing.Left;
                 }
                 else
                 {
-                    while()
+                    BinarySearchTreeNode<T> temp = Return.Pop();
+                    foreach (var val in temp.Values)
+                    {
+                        traversed.Enqueue(val);
+                    }
+                    traversing = temp.Right;
                 }
             }
+            return traversed;
         }
     }
 }

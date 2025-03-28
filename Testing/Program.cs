@@ -1,4 +1,5 @@
 ﻿using DataStructures.Trees;
+using DataStructures.StacksAndQueues;
 namespace Testing
 {
 
@@ -24,16 +25,23 @@ namespace Testing
     {
         static void Main(string[] args)
         {
+            Random rand = new(347520934);
             BinarySearchTree<int> Tree = new();
-            Tree.Insert(7);
-            Tree.Insert(5);
-            Tree.Insert(9);
-            Tree.Insert(3);
-            Tree.Insert(6);
-            Tree.Insert(8);
-            Tree.Insert(10);
-
-            var thing = Tree.LevelOrderTraversal();
+            for(int i = 0; i < 2000000; i++)
+            {
+                Tree.Insert(rand.Next());
+            }
+            Queue<int> thing = Tree.InOrderTraversal();
+            bool thing1 = true;
+            int temp = thing.Dequeue();
+            for(int i = 0; i < 1999999; i++)
+            {
+                if(temp > thing.Dequeue())
+                {
+                    thing1 = false;
+                    break;
+                }
+            }
             ;
         }
     }
