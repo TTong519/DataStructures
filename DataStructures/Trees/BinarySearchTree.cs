@@ -205,5 +205,27 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
+        BinarySearchTreeNode<T> Remove (BinarySearchTreeNode<T> Node)
+        {
+           if(Node.Left != null && Node.Right == null)
+           {
+                return Node.Left;
+           }
+           else if (Node.Left == null && Node.Right != null)
+           {
+                return Node.Right;
+           }
+           else if(Node.Left == null && Node.Right == null)
+           {
+                return null;
+           }
+           else
+           {
+                BinarySearchTreeNode<T> biggestsmall = Node.Left;
+                if (biggestsmall.Right != null) biggestsmall = biggestsmall.Right;
+                if(biggestsmall.Left != null) Node = biggestsmall.Left;
+                return biggestsmall
+           }
+        }
     }
 }
