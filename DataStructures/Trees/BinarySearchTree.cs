@@ -205,27 +205,66 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
-        BinarySearchTreeNode<T> Remove (BinarySearchTreeNode<T> Node)
+        private BinarySearchTreeNode<T> Remove(BinarySearchTreeNode<T> Node, T val)
         {
-           if(Node.Left != null && Node.Right == null)
+           if(Node.Values.Count > 1)
            {
-                return Node.Left;
+                Node.Values.Remove(val);
+                return Node;
            }
-           else if (Node.Left == null && Node.Right != null)
-           {
-                return Node.Right;
-           }
-           else if(Node.Left == null && Node.Right == null)
-           {
-                return null;
-           }
+           if(Node.Left == null) return Node.Right;
+
+           else if (Node.Right == null) return Node.Left;
+
            else
            {
                 BinarySearchTreeNode<T> biggestsmall = Node.Left;
-                if (biggestsmall.Right != null) biggestsmall = biggestsmall.Right;
-                if(biggestsmall.Left != null) Node = biggestsmall.Left;
-                return biggestsmall
+                BinarySearchTreeNode<T> parent = biggestsmall;
+                if (biggestsmall.Left != null) biggestsmall = biggestsmall.Right;
+                while (biggestsmall.Right != null)
+                {
+                    parent = biggestsmall;
+                    biggestsmall = biggestsmall.Right;
+                }
+                parent.Right = biggestsmall.Left;
+                return biggestsmall;
            }
+        }
+        public bool Remove(T val)
+        {
+            BinarySearchTreeNode<T> current = Root;
+            while (current != null)
+            {
+                if (current.Values[0].CompareTo(val) > 0)
+                {
+                    if (current.Left.Values[0].CompareTo(val) == 0)
+                    {
+                        current.Left = Remove(current.Left, val);
+                        return true;
+                    }
+                    else if (current.Right.Values[0].CompareTo(val) == 0)
+                    {
+                        current.Right = Remove(current.Right, val);
+                        return true;
+                    }
+                    current = current.Left;
+                }
+                else if (current.Values[0].CompareTo(val) < 0)
+                {
+                    if (current.Left.Values[0].CompareTo(val) == 0)
+                    {
+                        current.Left = Remove(current.Left, val);
+                        return true;
+                    }
+                    else if (current.Right.Values[0].CompareTo(val) == 0)
+                    {
+                        current.Right = Remove(current.Right, val);
+                        return true;
+                    }
+                    current = current.Right;
+                }
+            }
+            return false;
         }
     }
 }

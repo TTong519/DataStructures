@@ -8,8 +8,8 @@ namespace DataStructures.Trees
 {
     public class BinarySearchTreeNode<T>
     {
-        public BinarySearchTreeNode<T>?Left { get; internal set; }
-        public BinarySearchTreeNode<T>? Right { get; internal set; }
+        public BinarySearchTreeNode<T> Left { get; internal set; }
+        public BinarySearchTreeNode<T> Right { get; internal set; }
         public List<T> Values { get; internal set; }
         public BinarySearchTreeNode(T value)
         {

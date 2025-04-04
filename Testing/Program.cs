@@ -25,23 +25,18 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            Random rand = new(347520934);
             BinarySearchTree<int> Tree = new();
-            for(int i = 0; i < 2000000; i++)
-            {
-                Tree.Insert(rand.Next());
-            }
-            Queue<int> thing = Tree.InOrderTraversal();
-            bool thing1 = true;
-            int temp = thing.Dequeue();
-            for(int i = 0; i < 1999999; i++)
-            {
-                if(temp > thing.Dequeue())
-                {
-                    thing1 = false;
-                    break;
-                }
-            }
+            Tree.Insert(58);
+            Tree.Insert(57);
+            Tree.Insert(76);
+            Tree.Insert(10);
+            Tree.Insert(31);
+            Tree.Insert(90);
+            Tree.Insert(74);
+            Tree.Insert(62);
+            Tree.Insert(67);
+            Tree.Remove(31);
+            var val = Tree.InOrderTraversal();
             ;
         }
     }
