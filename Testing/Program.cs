@@ -35,7 +35,7 @@ namespace Testing
             Tree.Insert(74);
             Tree.Insert(62);
             Tree.Insert(67);
-            Tree.Remove(31);
+            Tree.Remove(76);
             var val = Tree.InOrderTraversal();
             ;
         }

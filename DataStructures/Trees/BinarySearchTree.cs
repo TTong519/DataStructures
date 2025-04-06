@@ -213,20 +213,18 @@ namespace DataStructures.Trees
                 return Node;
            }
            if(Node.Left == null) return Node.Right;
-
            else if (Node.Right == null) return Node.Left;
-
            else
            {
                 BinarySearchTreeNode<T> biggestsmall = Node.Left;
                 BinarySearchTreeNode<T> parent = biggestsmall;
-                if (biggestsmall.Left != null) biggestsmall = biggestsmall.Right;
+                if (biggestsmall.Right != null) biggestsmall = biggestsmall.Right;
                 while (biggestsmall.Right != null)
                 {
                     parent = biggestsmall;
                     biggestsmall = biggestsmall.Right;
                 }
-                parent.Right = biggestsmall.Left;
+                if(parent != biggestsmall)parent.Right = biggestsmall.Left;
                 return biggestsmall;
            }
         }
@@ -237,28 +235,64 @@ namespace DataStructures.Trees
             {
                 if (current.Values[0].CompareTo(val) > 0)
                 {
-                    if (current.Left.Values[0].CompareTo(val) == 0)
+                    if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
                     {
-                        current.Left = Remove(current.Left, val);
+                        BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
+                        if (toReplace != null)
+                        {
+                            if (toReplace != current.Right.Left)
+                            {
+                                toReplace.Left = current.Right.Left;
+                            }
+                            toReplace.Right = current.Left.Right;
+                        }
+                        current.Left = toReplace;
                         return true;
                     }
-                    else if (current.Right.Values[0].CompareTo(val) == 0)
+                    else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
                     {
-                        current.Right = Remove(current.Right, val);
+                        BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
+                        if (toReplace != null)
+                        {
+                            if (toReplace != current.Right.Left)
+                            {
+                                toReplace.Left = current.Right.Left;
+                            }
+                            toReplace.Right = current.Right.Right;
+                        }
+                        current.Right = toReplace;
                         return true;
                     }
                     current = current.Left;
                 }
                 else if (current.Values[0].CompareTo(val) < 0)
                 {
-                    if (current.Left.Values[0].CompareTo(val) == 0)
+                    if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
                     {
-                        current.Left = Remove(current.Left, val);
+                        BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
+                        if (toReplace != null)
+                        {
+                            if (toReplace != current.Right.Left)
+                            {
+                                toReplace.Left = current.Right.Left;
+                            }
+                            toReplace.Right = current.Left.Right;
+                        }
+                        current.Left = toReplace;
                         return true;
                     }
-                    else if (current.Right.Values[0].CompareTo(val) == 0)
+                    else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
                     {
-                        current.Right = Remove(current.Right, val);
+                        BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
+                        if (toReplace != null)
+                        {
+                            if (toReplace != current.Right.Left)
+                            {
+                                toReplace.Left = current.Right.Left;
+                            }
+                            toReplace.Right = current.Right.Right;
+                        }
+                        current.Right = toReplace;
                         return true;
                     }
                     current = current.Right;
