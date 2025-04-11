@@ -161,6 +161,15 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
+        public void PreOrderTraversalRecursive(Queue<T> traversed, BinarySearchTreeNode<T> node)
+        {
+            foreach (var thing in node.Values)
+            {
+                traversed.Enqueue(thing);
+            }
+            if (node.Left != null) PreOrderTraversalRecursive(traversed, node.Left);
+            if (node.Right != null) PreOrderTraversalRecursive(traversed, node.Right);
+        }
         public Stack<T> PostOrderTraversal()
         {
             Stack<BinarySearchTreeNode<T>> toTransverse = new();
@@ -180,6 +189,15 @@ namespace DataStructures.Trees
                 }
             }
             return traversed;
+        }
+        public void PostOrderTraversalRecursive(List<T> traversed, BinarySearchTreeNode<T> node)
+        {
+            if (node.Left != null) PostOrderTraversalRecursive(traversed, node.Left);
+            if (node.Right != null) PostOrderTraversalRecursive(traversed, node.Right);
+            foreach (var thing in node.Values)
+            {
+                traversed.Add(thing);
+            }
         }
         public Queue<T> InOrderTraversal()
         {

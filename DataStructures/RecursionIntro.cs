@@ -4,17 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stack_Queue
+namespace DataStructures
 {
-    class RecursionIntro
+    public class RecursionIntro
     {
-        int arraysum(int[] array)
+        public static int ArraySum(int[] array, int index)
         {
-
+            if (array.Length == 0) return 0;
+            if (index == 0) return array[0];
+            return ArraySum(array, index - 1) + array[index];
         }
-        string stringreverser
+        public static void CountDown(int num)
         {
-
+            if (num == 0) return;
+            Console.WriteLine(num);
+            CountDown(num - 1);
         }
     }
 }

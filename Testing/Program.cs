@@ -1,5 +1,6 @@
 ﻿using DataStructures.Trees;
 using DataStructures.StacksAndQueues;
+using DataStructures;
 namespace Testing
 {
 
@@ -25,19 +26,24 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            BinarySearchTree<int> Tree = new();
-            Tree.Insert(58);
-            Tree.Insert(57);
-            Tree.Insert(76);
-            Tree.Insert(10);
-            Tree.Insert(31);
-            Tree.Insert(90);
-            Tree.Insert(74);
-            Tree.Insert(62);
-            Tree.Insert(67);
-            Tree.Remove(76);
-            var val = Tree.InOrderTraversal();
-            ;
+            Random random = new();
+            for(int i = 0; i < 1000; i++)
+            {
+                Stack<int> results = new();
+                List<int> trialresults = new();
+                BinarySearchTree<int> ints = new();
+                for(int j = 0; j < 10; j++)
+                {
+                    ints.Insert(random.Next(100));
+                }
+                results = ints.PostOrderTraversal();
+                ints.PostOrderTraversalRecursive(trialresults, ints.Root);
+                if(!results.SequenceEqual(trialresults))
+                {
+                    Console.WriteLine("failure");
+                    break;
+                }
+            }
         }
     }
 }
