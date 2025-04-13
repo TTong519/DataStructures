@@ -27,17 +27,17 @@ namespace Testing
         static void Main(string[] args)
         {
             Random random = new();
-            for(int i = 0; i < 1000; i++)
+            for(int i = 0; i < 1000000; i++)
             {
-                Stack<int> results = new();
+                Queue<int> results = new();
                 List<int> trialresults = new();
                 BinarySearchTree<int> ints = new();
                 for(int j = 0; j < 10; j++)
                 {
-                    ints.Insert(random.Next(100));
+                    ints.Insert(random.Next(1000000));
                 }
-                results = ints.PostOrderTraversal();
-                ints.PostOrderTraversalRecursive(trialresults, ints.Root);
+                results = ints.InOrderTraversal();
+                ints.InOrderTraversalRecursive(trialresults, ints.Root);
                 if(!results.SequenceEqual(trialresults))
                 {
                     Console.WriteLine("failure");

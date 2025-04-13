@@ -223,6 +223,15 @@ namespace DataStructures.Trees
             }
             return traversed;
         }
+        public void InOrderTraversalRecursive(List<T> traversed, BinarySearchTreeNode<T> node)
+        {
+            if (node.Left != null) InOrderTraversalRecursive(traversed, node.Left);
+            foreach (var thing in node.Values)
+            {
+                traversed.Add(thing);
+            }
+            if (node.Right != null) InOrderTraversalRecursive(traversed, node.Right);
+        }
         private BinarySearchTreeNode<T> Remove(BinarySearchTreeNode<T> Node, T val)
         {
            if(Node.Values.Count > 1)
