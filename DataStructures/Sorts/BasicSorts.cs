@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataStructures.Sorts.BasicSorts
+namespace DataStructures.Sorts
 {
     static class BasicSorts
     {
@@ -45,7 +45,7 @@ namespace DataStructures.Sorts.BasicSorts
         {
             for (int i = 0; i < array.Length; i++)
             {
-                int minIndex = FindLeast(array, i);
+                int minIndex = array.FindLeast(i);
                 T temp = array[i];
                 array[i] = array[minIndex];
                 array[minIndex] = temp;

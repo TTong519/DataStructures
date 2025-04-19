@@ -32,9 +32,9 @@ namespace Testing
                 Queue<int> results = new();
                 List<int> trialresults = new();
                 BinarySearchTree<int> ints = new();
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j < 1000000; j++)
                 {
-                    ints.Insert(random.Next(1000000));
+                    ints.Insert(random.Next(47592572));
                 }
                 results = ints.InOrderTraversal();
                 ints.InOrderTraversalRecursive(trialresults, ints.Root);

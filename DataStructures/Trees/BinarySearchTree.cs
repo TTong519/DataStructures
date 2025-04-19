@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataStructures.Trees
 {
+
     public class BinarySearchTree<T> where T : IComparable<T>
     {
         public BinarySearchTreeNode<T> Root;
