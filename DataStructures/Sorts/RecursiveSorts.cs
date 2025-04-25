@@ -24,36 +24,67 @@ namespace DataStructures.Sorts
             }
             left = MergeSort(left);
             right = MergeSort(right);
-            int leftindex = 0;
-            int rightindex = 0;
+            int leftIndex = 0;
+            int rightIndex = 0;
             List<T> result = new List<T>();
             for(int i = 0; i < toSort.Count; i++)
             {
-                if (right.Count <= rightindex)
+                if (right.Count <= rightIndex)
                 {
-                    result.Add(left[leftindex]);
-                    leftindex++;
+                    result.Add(left[leftIndex]);
+                    leftIndex++;
                 }
-                else if(left.Count <= leftindex)
+                else if(left.Count <= leftIndex)
                 {
-                    result.Add(right[rightindex]);
-                    rightindex++;
+                    result.Add(right[rightIndex]);
+                    rightIndex++;
                 }
                 else
                 {
-                    if (left[leftindex].CompareTo(right[rightindex]) <= 0)
+                    if (left[leftIndex].CompareTo(right[rightIndex]) <= 0)
                     {
-                        result.Add(left[leftindex]);
-                        leftindex++;
+                        result.Add(left[leftIndex]);
+                        leftIndex++;
                     }
                     else
                     {
-                        result.Add(left[leftindex]);
-                        rightindex++;
+                        result.Add(right[rightIndex]);
+                        rightIndex++;
                     }
                 }
             }
             return result;
+        }
+        public static void LomutoQuickSort<T>(List<T> toSort, int start, int end) where T : IComparable
+        {
+            int wall = start;
+            int index = start;
+            if(end - start < 2)
+            {
+                return;
+            }
+            T pivot = toSort[end-1];
+            while (index < end)
+            {
+                if (toSort[index].CompareTo(pivot) < 0)
+                {
+                    T temp1 = toSort[index];
+                    toSort.RemoveAt(index);
+                    toSort.Insert(wall, temp1);
+                    wall++;
+                    index++;
+                }
+                else
+                {
+                    index++;
+                }
+            }
+            T temp = toSort[toSort.Count - 1];
+            toSort.RemoveAt(toSort.Count - 1);
+            toSort.Insert(wall, temp);
+            LomutoQuickSort(toSort, start, wall);//no worky
+            LomutoQuickSort(toSort, wall + 1, end);
+            return;
         }
     }
 }
