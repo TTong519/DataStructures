@@ -79,12 +79,34 @@ namespace DataStructures.Sorts
                     index++;
                 }
             }
-            T temp = toSort[toSort.Count - 1];
-            toSort.RemoveAt(toSort.Count - 1);
-            toSort.Insert(wall, temp);
+            toSort.RemoveAt(end - 1);
+            toSort.Insert(wall, pivot);
             LomutoQuickSort(toSort, start, wall);//no worky
             LomutoQuickSort(toSort, wall + 1, end);
             return;
+        }
+        public static void HoareQuickSort<T>(List<T> toSort, int start, int end) where T : IComparable
+        {
+            int LEFT = start;
+            int RIGHT = end;
+            if (toSort.Count < 2) return;
+            T pivot = toSort[start];
+            while (LEFT.CompareTo(RIGHT) >= 0)
+            {
+                while (toSort[LEFT].CompareTo(pivot) < 0)
+                {
+                    LEFT++;
+                }
+                while (toSort[RIGHT].CompareTo(pivot) > 0)
+                {
+                    RIGHT--;
+                }
+                T temp = toSort[LEFT];
+                toSort[LEFT] = toSort[RIGHT];
+                toSort[RIGHT] = temp;
+            }
+            HoareQuickSort<T>(toSort, start, LEFT);
+            HoareQuickSort(toSort, RIGHT, end);
         }
     }
 }

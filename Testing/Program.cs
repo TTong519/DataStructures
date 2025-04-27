@@ -26,23 +26,18 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            Random random = new();
-            for(int i = 0; i < 1000000; i++)
+            List<int> asdlfasd = new List<int>();
+            asdlfasd.Add(1);
+            asdlfasd.Add(2);
+            asdlfasd.Add(3);
+            asdlfasd.Add(4);
+            asdlfasd.Add(5);
+            asdlfasd.Add(6);
+            asdlfasd.Add(7);
+            asdlfasd.Insert(3, 1);
+            foreach (int i in asdlfasd)
             {
-                Queue<int> results = new();
-                List<int> trialresults = new();
-                BinarySearchTree<int> ints = new();
-                for(int j = 0; j < 1000000; j++)
-                {
-                    ints.Insert(random.Next(47592572));
-                }
-                results = ints.InOrderTraversal();
-                ints.InOrderTraversalRecursive(trialresults, ints.Root);
-                if(!results.SequenceEqual(trialresults))
-                {
-                    Console.WriteLine("failure");
-                    break;
-                }
+                Console.WriteLine(i);
             }
         }
     }
