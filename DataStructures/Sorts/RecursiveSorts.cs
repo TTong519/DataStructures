@@ -85,28 +85,40 @@ namespace DataStructures.Sorts
             LomutoQuickSort(toSort, wall + 1, end);
             return;
         }
-        public static void HoareQuickSort<T>(List<T> toSort, int start, int end) where T : IComparable
+        public static void HoareQuickSort<T>(List<T> toSort, int start, int end) where T : IComparable<T>
         {
             int LEFT = start;
             int RIGHT = end;
-            if (toSort.Count < 2) return;
+            if (end - start < 2) return;
             T pivot = toSort[start];
-            while (LEFT.CompareTo(RIGHT) >= 0)
+            while (LEFT.CompareTo(RIGHT) < 0)
             {
-                while (toSort[LEFT].CompareTo(pivot) < 0)
+                while (toSort[LEFT].CompareTo(pivot) < 0 && RIGHT >= LEFT)
                 {
                     LEFT++;
                 }
-                while (toSort[RIGHT].CompareTo(pivot) > 0)
+                while (toSort[RIGHT].CompareTo(pivot) >= 0 && RIGHT >= LEFT)
                 {
                     RIGHT--;
                 }
-                T temp = toSort[LEFT];
-                toSort[LEFT] = toSort[RIGHT];
-                toSort[RIGHT] = temp;
+                if (RIGHT >= LEFT)
+                {
+                    T temp = toSort[LEFT];
+                    toSort[LEFT] = toSort[RIGHT];
+                    toSort[RIGHT] = temp;
+                }
+                if (RIGHT - 1 == LEFT)
+                {
+                    LEFT++;
+                    RIGHT--;
+                }
+                if (RIGHT == LEFT)
+                {
+                    RIGHT--;
+                }
             }
-            HoareQuickSort<T>(toSort, start, LEFT);
-            HoareQuickSort(toSort, RIGHT, end);
+            HoareQuickSort<T>(toSort, start, RIGHT);
+            HoareQuickSort(toSort, LEFT, end);
         }
     }
 }

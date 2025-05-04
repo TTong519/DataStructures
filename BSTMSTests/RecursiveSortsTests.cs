@@ -56,10 +56,10 @@ namespace DataStructuresTests
             Assert.IsFalse(isFailed);
         }
         [TestMethod]
+        [DataRow(36412799)]
         [DataRow(834047848)]
         [DataRow(300173266)]
         [DataRow(1241957440)]
-        [DataRow(36412799)]
         [DataRow(50322915)]
         [DataRow(25004)]
 
