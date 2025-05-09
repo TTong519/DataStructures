@@ -11,14 +11,14 @@ namespace DataStructures.Sorts
     {
         public static List<T> MergeSort<T>(List<T> toSort) where T : IComparable
         {
-            if(toSort.Count < 2) return toSort;
+            if (toSort.Count < 2) return toSort;
             List<T> left = new List<T>();
-            for(int i = 0; i < toSort.Count/2; i++)
+            for (int i = 0; i < toSort.Count / 2; i++)
             {
                 left.Add(toSort[i]);
             }
             List<T> right = new List<T>();
-            for(int i = toSort.Count / 2; i < toSort.Count; i++)
+            for (int i = toSort.Count / 2; i < toSort.Count; i++)
             {
                 right.Add(toSort[i]);
             }
@@ -27,14 +27,14 @@ namespace DataStructures.Sorts
             int leftIndex = 0;
             int rightIndex = 0;
             List<T> result = new List<T>();
-            for(int i = 0; i < toSort.Count; i++)
+            for (int i = 0; i < toSort.Count; i++)
             {
                 if (right.Count <= rightIndex)
                 {
                     result.Add(left[leftIndex]);
                     leftIndex++;
                 }
-                else if(left.Count <= leftIndex)
+                else if (left.Count <= leftIndex)
                 {
                     result.Add(right[rightIndex]);
                     rightIndex++;
@@ -59,11 +59,11 @@ namespace DataStructures.Sorts
         {
             int wall = start;
             int index = start;
-            if(end - start < 2)
+            if (end - start < 2)
             {
                 return;
             }
-            T pivot = toSort[end-1];
+            T pivot = toSort[end - 1];
             while (index < end)
             {
                 if (toSort[index].CompareTo(pivot) < 0)
@@ -87,38 +87,43 @@ namespace DataStructures.Sorts
         }
         public static void HoareQuickSort<T>(List<T> toSort, int start, int end) where T : IComparable<T>
         {
-            int LEFT = start;
-            int RIGHT = end;
-            if (end - start < 2) return;
+            int left = start - 1;
+            int right = end + 1;
+
+            if (end - start < 1) return;
+            
             T pivot = toSort[start];
-            while (LEFT.CompareTo(RIGHT) < 0)
+            while (true)
             {
-                while (toSort[LEFT].CompareTo(pivot) < 0 && RIGHT >= LEFT)
+                do
                 {
-                    LEFT++;
+                    left++;
                 }
-                while (toSort[RIGHT].CompareTo(pivot) >= 0 && RIGHT >= LEFT)
+                while (toSort[left].CompareTo(pivot) < 0);
+                do
                 {
-                    RIGHT--;
+                    right--;
                 }
-                if (RIGHT >= LEFT)
-                {
-                    T temp = toSort[LEFT];
-                    toSort[LEFT] = toSort[RIGHT];
-                    toSort[RIGHT] = temp;
-                }
-                if (RIGHT - 1 == LEFT)
-                {
-                    LEFT++;
-                    RIGHT--;
-                }
-                if (RIGHT == LEFT)
-                {
-                    RIGHT--;
-                }
+                while (toSort[right].CompareTo(pivot) > 0);
+
+                if (left >= right) break;
+                
+                T temp = toSort[left];
+                toSort[left] = toSort[right];
+                toSort[right] = temp;
+                //if (right - 1 == left)
+                //{
+                //    left++;
+                //    right--;
+                //}
+                //if (right == left)
+                //{
+                //    right--;
+                //}
             }
-            HoareQuickSort<T>(toSort, start, RIGHT);
-            HoareQuickSort(toSort, LEFT, end);
+
+            HoareQuickSort<T>(toSort, start, right);
+            HoareQuickSort(toSort, right + 1, end);
         }
     }
 }
