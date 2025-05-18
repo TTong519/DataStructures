@@ -9,8 +9,6 @@ namespace DataStructuresTests
     [TestClass]
     public class HeapTests
     {
-        [TestMethod]
-        [DataRow(7, 5, 2, 8, 1, 92, 0, -100, -7)]
         public void Add(params int[] input)
         {
             HeapTree<int> tree = new HeapTree<int>();
@@ -28,8 +26,6 @@ namespace DataStructuresTests
                 }
             }
         }
-        [TestMethod]
-        [DataRow(7, 5, 2, 8, 1, 92, 0, -100, -7)]
         public void Remove(params int[] input)
         {
             HeapTree<int> tree = new HeapTree<int>();
@@ -38,7 +34,7 @@ namespace DataStructuresTests
             {
                 tree.Add(i);
             }
-            for(int i = 0; i < tree.Count; i++)
+            for(int i = 0; i < tree.Capacity - 1; i++)
             {
                 removed.Add(tree.Pop());
             }
@@ -61,6 +57,23 @@ namespace DataStructuresTests
                 array[i] = random.Next();
             }
             Add(array);
+        }
+        [TestMethod]
+        [DataRow(36412799)]
+        [DataRow(834047848)]
+        [DataRow(300173266)]
+        [DataRow(1241957440)]
+        [DataRow(50322915)]
+        [DataRow(25004)]
+        public void Remove(int seed)
+        {
+            Random random = new Random();
+            int[] array = new int[random.Next(20, 50)];
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = random.Next();
+            }
+            Remove(array);
         }
     }
 }

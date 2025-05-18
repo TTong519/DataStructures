@@ -37,11 +37,11 @@ namespace DataStructures.Trees
             int rightIndex = 2 * index + 2;
             bool left = false;
             bool right = false;
-            if (leftIndex > Count)
+            if (leftIndex >= Count || data[index].CompareTo(data[leftIndex]) < 0)
             {
                 left = true;
             }
-            if (rightIndex > Count)
+            if (rightIndex >= Count || data[index].CompareTo(data[rightIndex]) < 0)
             {
                 right = true;
             }
@@ -65,7 +65,7 @@ namespace DataStructures.Trees
             }
             else
             {
-                if (data[leftIndex].CompareTo(data[rightIndex]) > 0)
+                if (data[leftIndex].CompareTo(data[rightIndex]) < 0)
                 {
                     T temp = data[index];
                     data[index] = data[leftIndex];
