@@ -34,7 +34,7 @@ namespace DataStructuresTests
             {
                 tree.Add(i);
             }
-            for(int i = 0; i < tree.Capacity - 1; i++)
+            for(int i = 0; i < input.Length; i++)
             {
                 removed.Add(tree.Pop());
             }
