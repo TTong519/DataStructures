@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,6 +92,26 @@ namespace DataStructures.Trees
                     current.Values.Add(value);
                     return;
                 }
+            }
+        }
+        public BinarySearchTreeNode<T> InsertRecursive(T value, BinarySearchTreeNode<T> currentNode)
+        {
+            if (currentNode == null) return new(value);
+            int comp = value.CompareTo(currentNode.Values[0]);
+            if (comp > 0)
+            {
+                currentNode.Right = InsertRecursive(value, currentNode.Right);
+                return null;
+            }
+            else if(comp < 0)
+            {
+                currentNode.Left = InsertRecursive(value, currentNode.Left);
+                return null;
+            }
+            else
+            {
+                currentNode.Values.Add(value);
+                return null;
             }
         }
         public T Minimum()

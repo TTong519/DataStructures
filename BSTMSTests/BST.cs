@@ -21,15 +21,16 @@ namespace DataStructuresTests
             //make unit test for testing your BST traveral
             Random random = new();
             Queue<int> results = new();
-            List<int> trialresults = new();
+            List<int> trialResults = new();
             BinarySearchTree<int> ints = new();
+            ints.Insert(seed);
             for (int j = 0; j < 1000000; j++)
             {
-                ints.Insert(random.Next(seed));
+                ints.InsertRecursive(random.Next(seed), ints.Root);
             }
             results = ints.InOrderTraversal();
-            ints.InOrderTraversalRecursive(trialresults, ints.Root);
-            bool isFailed = !results.SequenceEqual(trialresults);
+            ints.InOrderTraversalRecursive(trialResults, ints.Root);
+            bool isFailed = !results.SequenceEqual(trialResults);
             Assert.IsFalse(isFailed);
         }
     }
