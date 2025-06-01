@@ -23,10 +23,9 @@ namespace DataStructuresTests
             Queue<int> results = new();
             List<int> trialResults = new();
             BinarySearchTree<int> ints = new();
-            ints.Insert(seed);
             for (int j = 0; j < 1000000; j++)
             {
-                ints.InsertRecursive(random.Next(seed), ints.Root);
+                ints.InsertRecursive(random.Next(seed));
             }
             results = ints.InOrderTraversal();
             ints.InOrderTraversalRecursive(trialResults, ints.Root);

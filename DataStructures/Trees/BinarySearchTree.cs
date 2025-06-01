@@ -94,24 +94,40 @@ namespace DataStructures.Trees
                 }
             }
         }
-        public BinarySearchTreeNode<T> InsertRecursive(T value, BinarySearchTreeNode<T> currentNode)
+        private BinarySearchTreeNode<T> HelperInsertRecursive(T value, BinarySearchTreeNode<T> currentNode)
         {
-            if (currentNode == null) return new(value);
+            if (currentNode == null) 
+            {
+                Count++;
+                return new(value); 
+            }
             int comp = value.CompareTo(currentNode.Values[0]);
             if (comp > 0)
             {
-                currentNode.Right = InsertRecursive(value, currentNode.Right);
-                return null;
+                currentNode.Right = HelperInsertRecursive(value, currentNode.Right);
+                return currentNode;
             }
             else if(comp < 0)
             {
-                currentNode.Left = InsertRecursive(value, currentNode.Left);
-                return null;
+                currentNode.Left = HelperInsertRecursive(value, currentNode.Left);
+                return currentNode;
             }
             else
             {
                 currentNode.Values.Add(value);
-                return null;
+                Count++;
+                return currentNode;
+            }
+        }
+        public void InsertRecursive(T value)
+        {
+            if(Root == null)
+            { 
+               Root = HelperInsertRecursive(value, null);
+            }
+            else
+            {
+                HelperInsertRecursive(value, Root);
             }
         }
         public T Minimum()

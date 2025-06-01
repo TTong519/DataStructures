@@ -11,17 +11,29 @@ namespace DaraStructures.Trees
         public AVLTreeNode<T> Left { get; internal set; }
         public AVLTreeNode<T> Right { get; internal set; }
 
-        public List<T> Value { get; internal set; }
+        public List<T> Values { get; internal set; }
 
-        internal int Height { get; set; }
+        internal int Height { get; private set; }
         internal int Balance { get { return Right.Height - Left.Height; } }
-        public void Node(T value) 
+        public AVLTreeNode(T value) 
         {
-            Value.Add(value);
+            Values.Add(value);
+            Height = 0;
         }
         internal void updateHeight()
         {
-
+            int leftHeight = 0;
+            int rightHeight = 0;
+            if (Left != null) leftHeight = Left.Height + 1;
+            if (Right != null) rightHeight = Right.Height + 1;
+            if(leftHeight >= rightHeight)
+            {
+                Height = leftHeight;
+            }
+            else
+            {
+                Height = rightHeight;
+            }
         }
     }
 }

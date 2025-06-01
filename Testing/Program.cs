@@ -26,19 +26,11 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            List<int> asdlfasd = new List<int>();
-            asdlfasd.Add(1);
-            asdlfasd.Add(2);
-            asdlfasd.Add(3);
-            asdlfasd.Add(4);
-            asdlfasd.Add(5);
-            asdlfasd.Add(6);
-            asdlfasd.Add(7);
-            asdlfasd.Insert(3, 1);
-            foreach (int i in asdlfasd)
-            {
-                Console.WriteLine(i);
-            }
+            BinarySearchTree <int> BST= new BinarySearchTree<int>();
+            BST.InsertRecursive(5323);
+            BST.InsertRecursive(3427);
+            BST.InsertRecursive(7436);
+            BST.InsertRecursive(8239);
         }
     }
 }
