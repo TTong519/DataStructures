@@ -33,6 +33,11 @@ namespace DataStructures.Trees
         {
             if (currentNode == null)
             {
+                if(Root == null)
+                {
+                    Root = new(value);
+                    return Root;
+                }
                 Count++;
                 return new(value);
             }
@@ -40,24 +45,38 @@ namespace DataStructures.Trees
             if (comp > 0)
             {
                 currentNode.Right = Insert(value, currentNode.Right);
-                currentNode.updateHeight();
+                currentNode.UpdateHeight();
                 if(currentNode.Balance > 1)
                 {
                     if(currentNode.Right.Balance < 0)
                     {
                         currentNode.Right = RotateRight(currentNode.Right);
+                        currentNode = RotateLeft(currentNode);
                     }
                     else
                     {
-
+                        currentNode = RotateLeft(currentNode);
                     }
                 }
+                else if (currentNode.Balance < -1)
+                {
+                    if(currentNode.Left.Balance > 0)
+                    {
+                        currentNode.Left = RotateLeft(currentNode.Left);
+                        currentNode = RotateRight(currentNode);
+                    }
+                    else
+                    {
+                        currentNode = RotateRight(currentNode);
+                    }
+                }
+                currentNode.UpdateHeight();
                 return currentNode;
             }
             else if (comp < 0)
             {
                 currentNode.Left = Insert(value, currentNode.Left);
-                currentNode.updateHeight();
+                currentNode.UpdateHeight();
                 return currentNode;
             }
             else
