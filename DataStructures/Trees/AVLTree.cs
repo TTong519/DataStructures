@@ -11,73 +11,73 @@ namespace DataStructures.Trees
     {
         public AVLTreeNode<T> Root;
         public int Count { get; private set; }
-        public AVLTreeNode<T> RotateLeft(AVLTreeNode<T> node)
+        private AVLTreeNode<T> RotateLeft(AVLTreeNode<T> node)
         {
             if (node == null) throw new ArgumentNullException("node cannot be null");
             if (node.Right == null) throw new ArgumentNullException("node.Right cannot be null");
             AVLTreeNode<T> nodeRight = node.Right;
             node.Right = nodeRight.Left;
+            if (node.Right != null) node.Right.UpdateHeight();
             nodeRight.Left = node;
+            nodeRight.UpdateHeight();
             return nodeRight;
         }
-        public AVLTreeNode<T> RotateRight(AVLTreeNode<T> node)
+        private AVLTreeNode<T> RotateRight(AVLTreeNode<T> node)
         {
             if (node == null) throw new ArgumentNullException("node cannot be null");
             if (node.Left == null) throw new ArgumentNullException("node.Left cannot be null");
             AVLTreeNode<T> nodeLeft = node.Left;
             node.Left = nodeLeft.Right;
+            if (node.Left != null) node.Left.UpdateHeight();
             nodeLeft.Right = node;
+            nodeLeft.UpdateHeight();
             return nodeLeft;
         }
-        public AVLTreeNode<T> Insert(T value, AVLTreeNode<T> currentNode)
+        private AVLTreeNode<T> Balance(AVLTreeNode<T> currentNode)
         {
-            if (currentNode == null)
+            if (currentNode.Balance > 1)
             {
-                if(Root == null)
+                if (currentNode.Right.Balance < 0)
                 {
-                    Root = new(value);
-                    return Root;
+                    currentNode.Right = RotateRight(currentNode.Right);
+                    currentNode.Right.UpdateHeight();
                 }
+                currentNode = RotateLeft(currentNode);
+
+            }
+            else if (currentNode.Balance < -1)
+            {
+                if (currentNode.Left.Balance > 0)
+                {
+                    currentNode.Left = RotateLeft(currentNode.Left);
+                    currentNode.Left.UpdateHeight();
+                }
+                currentNode = RotateRight(currentNode);
+
+            }
+            currentNode.UpdateHeight();
+            return currentNode;
+        }
+        
+        public void Insert(T value)
+        {
+            var node=InsertRec(value, Root);
+            Root = node;
+        }
+        public AVLTreeNode<T> InsertRec(T value, AVLTreeNode<T> currentNode)
+        {
+            if(currentNode == null)
+            {
                 Count++;
-                return new(value);
+                return new AVLTreeNode<T>(value);
             }
-            int comp = value.CompareTo(currentNode.Values[0]);
-            if (comp > 0)
+            if (currentNode.Values[0].CompareTo(value) > 0)
             {
-                currentNode.Right = Insert(value, currentNode.Right);
-                currentNode.UpdateHeight();
-                if(currentNode.Balance > 1)
-                {
-                    if(currentNode.Right.Balance < 0)
-                    {
-                        currentNode.Right = RotateRight(currentNode.Right);
-                        currentNode = RotateLeft(currentNode);
-                    }
-                    else
-                    {
-                        currentNode = RotateLeft(currentNode);
-                    }
-                }
-                else if (currentNode.Balance < -1)
-                {
-                    if(currentNode.Left.Balance > 0)
-                    {
-                        currentNode.Left = RotateLeft(currentNode.Left);
-                        currentNode = RotateRight(currentNode);
-                    }
-                    else
-                    {
-                        currentNode = RotateRight(currentNode);
-                    }
-                }
-                currentNode.UpdateHeight();
-                return currentNode;
+                currentNode.Left = InsertRec(value, currentNode.Left);
             }
-            else if (comp < 0)
+            else if (currentNode.Values[0].CompareTo(value) < 0)
             {
-                currentNode.Left = Insert(value, currentNode.Left);
-                currentNode.UpdateHeight();
-                return currentNode;
+                currentNode.Right = InsertRec(value, currentNode.Right);
             }
             else
             {
@@ -85,6 +85,11 @@ namespace DataStructures.Trees
                 Count++;
                 return currentNode;
             }
+            currentNode.UpdateHeight();
+            currentNode = Balance(currentNode);
+            return currentNode;
+
         }
+
     }
 }
