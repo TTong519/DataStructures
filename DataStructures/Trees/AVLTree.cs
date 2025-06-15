@@ -56,6 +56,8 @@ namespace DataStructures.Trees
 
             }
             currentNode.UpdateHeight();
+            if (currentNode.Left != null) currentNode.Left.UpdateHeight();
+            if (currentNode.Right != null) currentNode.Right.UpdateHeight();
             return currentNode;
         }
         
@@ -87,9 +89,108 @@ namespace DataStructures.Trees
             }
             currentNode.UpdateHeight();
             currentNode = Balance(currentNode);
+            currentNode.UpdateHeight();
             return currentNode;
 
         }
-
+        private AVLTreeNode<T> Remove(AVLTreeNode<T> Node, T val)
+        {
+            if (Node.Values.Count > 1)
+            {
+                Node.Values.Remove(val);
+                return Node;
+            }
+            if (Node.Left == null) return Node.Right;
+            else if (Node.Right == null) return Node.Left;
+            else
+            {
+                AVLTreeNode<T> biggestsmall = Node.Left;
+                AVLTreeNode<T> parent = biggestsmall;
+                if (biggestsmall.Right != null)
+                {
+                    biggestsmall = biggestsmall.Right;
+                    biggestsmall.UpdateHeight();
+                }
+                while (biggestsmall.Right != null)
+                {
+                    parent = biggestsmall;
+                    parent.UpdateHeight();
+                    biggestsmall = biggestsmall.Right;
+                    biggestsmall.UpdateHeight();
+                }
+                if (parent != biggestsmall) parent.Right = biggestsmall.Left;
+                parent.Right.UpdateHeight();
+                return biggestsmall;
+            }
+        }
+        public bool RemoveRecursive(AVLTreeNode<T> current, T val)
+        {
+            if (current == null) return false;
+            if (current.Values[0].CompareTo(val) > 0)
+            {
+                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
+                {
+                    AVLTreeNode<T> toReplace = Remove(current.Left, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Left.Right;
+                    }
+                    current.Left = toReplace;
+                    return true;
+                }
+                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
+                {
+                    AVLTreeNode<T> toReplace = Remove(current.Right, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Right.Right;
+                    }
+                    current.Right = toReplace;
+                    return true;
+                }
+                RemoveRecursive(current.Left, val);
+            }
+            else if (current.Values[0].CompareTo(val) < 0)
+            {
+                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
+                {
+                    AVLTreeNode<T> toReplace = Remove(current.Left, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Left.Right;
+                    }
+                    current.Left = toReplace;
+                    return true;
+                }
+                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
+                {
+                    AVLTreeNode<T> toReplace = Remove(current.Right, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Right.Right;
+                    }
+                    current.Right = toReplace;
+                    return true;
+                }
+                RemoveRecursive(current.Right, val);
+            }
+            return false;
+        }
     }
 }

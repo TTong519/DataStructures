@@ -293,6 +293,75 @@ namespace DataStructures.Trees
                 return biggestsmall;
            }
         }
+        public bool RemoveRecursive(BinarySearchTreeNode<T> current, T val)
+        {
+            if(current == null) return false;
+            if (current.Values[0].CompareTo(val) > 0)
+            {
+                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
+                {
+                    BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Left.Right;
+                    }
+                    current.Left = toReplace;
+                    return true;
+                }
+                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
+                {
+                    BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Right.Right;
+                    }
+                    current.Right = toReplace;
+                    return true;
+                }
+                RemoveRecursive(current.Left, val);
+            }
+            else if (current.Values[0].CompareTo(val) < 0)
+            {
+                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
+                {
+                    BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Left.Right;
+                    }
+                    current.Left = toReplace;
+                    return true;
+                }
+                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
+                {
+                    BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
+                    if (toReplace != null)
+                    {
+                        if (toReplace != current.Right.Left)
+                        {
+                            toReplace.Left = current.Right.Left;
+                        }
+                        toReplace.Right = current.Right.Right;
+                    }
+                    current.Right = toReplace;
+                    return true;
+                }
+                RemoveRecursive(current.Right, val);
+            }
+            return false;
+        }
         public bool Remove(T val)
         {
             BinarySearchTreeNode<T> current = Root;
