@@ -31,11 +31,11 @@ namespace DaraStructures.Trees
         }
         internal void UpdateHeight()
         {
-            int leftHeight =0 ;
-            int rightHeight =0;
+            int leftHeight = 0;
+            int rightHeight = 0;
             if (Left != null) leftHeight = Left.Height;
             if (Right != null) rightHeight = Right.Height;
-            Height = Math.Max(leftHeight, rightHeight)+1;
+            Height = Math.Max(leftHeight, rightHeight) + 1;
         }
     }
 }

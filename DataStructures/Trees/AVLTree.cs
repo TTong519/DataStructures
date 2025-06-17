@@ -13,8 +13,6 @@ namespace DataStructures.Trees
         public int Count { get; private set; }
         private AVLTreeNode<T> RotateLeft(AVLTreeNode<T> node)
         {
-            if (node == null) throw new ArgumentNullException("node cannot be null");
-            if (node.Right == null) throw new ArgumentNullException("node.Right cannot be null");
             AVLTreeNode<T> nodeRight = node.Right;
             node.Right = nodeRight.Left;
             if (node.Right != null) node.Right.UpdateHeight();
@@ -24,8 +22,6 @@ namespace DataStructures.Trees
         }
         private AVLTreeNode<T> RotateRight(AVLTreeNode<T> node)
         {
-            if (node == null) throw new ArgumentNullException("node cannot be null");
-            if (node.Left == null) throw new ArgumentNullException("node.Left cannot be null");
             AVLTreeNode<T> nodeLeft = node.Left;
             node.Left = nodeLeft.Right;
             if (node.Left != null) node.Left.UpdateHeight();
@@ -120,12 +116,14 @@ namespace DataStructures.Trees
                 }
                 if (parent != biggestsmall) parent.Right = biggestsmall.Left;
                 parent.Right.UpdateHeight();
+                biggestsmall = Balance(biggestsmall);
                 return biggestsmall;
             }
         }
         public bool RemoveRecursive(AVLTreeNode<T> current, T val)
         {
             if (current == null) return false;
+            current = Balance(current);
             if (current.Values[0].CompareTo(val) > 0)
             {
                 if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
