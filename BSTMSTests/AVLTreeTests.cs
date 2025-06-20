@@ -47,4 +47,30 @@ public class AVLTreeTests
         }
         AVLInsertTestHelper(tree.Root);
     }
+    [TestMethod]
+    [DataRow(89435793)]
+    [DataRow(89345795)]
+    [DataRow(84235270)]
+    [DataRow(89442324)]
+    [DataRow(28345673)]
+    [DataRow(34523648)]
+    public void AVLRemoveTest(int seed)
+    {
+        AVLTree<int> tree = new AVLTree<int>();
+        Random rand = new Random(seed);
+        tree.Insert(rand.Next());
+        int len = rand.Next(1, 30);
+        List<int> values = new List<int>();
+        for (int i = 0; i < len; i++)
+        {
+            int j = rand.Next();
+            tree.Insert(j);
+            values.Add(j);
+        }
+        for (int i = 0; i < len; i++)
+        {
+            tree.RemoveRecursive(tree.Root, values[i]);
+            AVLInsertTestHelper(tree.Root);
+        }
+    }
 }

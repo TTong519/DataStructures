@@ -107,40 +107,56 @@ namespace DataStructures.Trees
                 return FindRecursive(current.Right, value);
             }
         }
-        private AVLTreeNode<T> Remove(AVLTreeNode<T> Node, T val)
+        private AVLTreeNode<T> RemoveNode(AVLTreeNode<T> Node)
         {
-            if (Node.Values.Count > 1)
+            if (Node.Left == null && Node.Right == null)
             {
-                Node.Values.Remove(val);
+                return null;
+            }
+            else if (Node.Left != null && Node.Right != null)
+            {
+                AVLTreeNode<T> tempNode = Node.Left;
+                while (tempNode.Right != null)
+                {
+                    tempNode = tempNode.Right;
+                }
+                Node.Values = tempNode.Values;
+                Node.Left = RemoveRecursive(Node.Left, tempNode.Values[0]);
                 return Node;
             }
-            if (Node.Left == null) return Node.Right;
-            else if (Node.Right == null) return Node.Left;
+            else if(Node.Left != null)
+            {
+                return Node.Left;
+            }
             else
             {
-                AVLTreeNode<T> biggestsmall = Node.Left;
-                AVLTreeNode<T> parent = biggestsmall;
-                if (biggestsmall.Right != null)
-                {
-                    biggestsmall = biggestsmall.Right;
-                    biggestsmall.UpdateHeight();
-                }
-                while (biggestsmall.Right != null)
-                {
-                    parent = biggestsmall;
-                    parent.UpdateHeight();
-                    biggestsmall = biggestsmall.Right;
-                    biggestsmall.UpdateHeight();
-                }
-                if (parent != biggestsmall) parent.Right = biggestsmall.Left;
-                parent.Right.UpdateHeight();
-                biggestsmall = Balance(biggestsmall);
-                return biggestsmall;
+                return Node.Right;
             }
         }
-        public bool RemoveRecursive(AVLTreeNode<T> current, T val)
+        public AVLTreeNode<T> RemoveRecursive(AVLTreeNode<T> currentNode, T val)
         {
-               
+            if (currentNode == null) return null;
+            if (currentNode.Values.Contains(val))
+            {
+                if(currentNode.Values.Count > 1)
+                {
+                    currentNode.Values.Remove(val);
+                    return currentNode;
+                }
+                else
+                {
+                    currentNode = RemoveNode(currentNode);
+                }
+            }
+            else if (currentNode.Values[0].CompareTo(val) > 0)
+            {
+               currentNode.Left = RemoveRecursive(currentNode.Left, val);
+            }
+            else
+            {
+                 currentNode.Right = RemoveRecursive(currentNode.Right, val);
+            }
+            return currentNode;
         }
     }
 }
