@@ -56,15 +56,15 @@ namespace DataStructures.Trees
             if (currentNode.Right != null) currentNode.Right.UpdateHeight();
             return currentNode;
         }
-        
+
         public void Insert(T value)
         {
-            var node=InsertRec(value, Root);
+            var node = InsertRec(value, Root);
             Root = node;
         }
         public AVLTreeNode<T> InsertRec(T value, AVLTreeNode<T> currentNode)
         {
-            if(currentNode == null)
+            if (currentNode == null)
             {
                 Count++;
                 return new AVLTreeNode<T>(value);
@@ -91,7 +91,7 @@ namespace DataStructures.Trees
         }
         public AVLTreeNode<T> Find(T value)
         {
-            if(Root == null) return null;
+            if (Root == null) return null;
             return FindRecursive(Root, value);
         }
         public AVLTreeNode<T> FindRecursive(AVLTreeNode<T> current, T value)
@@ -124,7 +124,7 @@ namespace DataStructures.Trees
                 Node.Left = RemoveRecursive(Node.Left, tempNode.Values[0]);
                 return Node;
             }
-            else if(Node.Left != null)
+            else if (Node.Left != null)
             {
                 return Node.Left;
             }
@@ -138,9 +138,10 @@ namespace DataStructures.Trees
             if (currentNode == null) return null;
             if (currentNode.Values.Contains(val))
             {
-                if(currentNode.Values.Count > 1)
+                if (currentNode.Values.Count > 1)
                 {
                     currentNode.Values.Remove(val);
+
                     return currentNode;
                 }
                 else
@@ -150,11 +151,25 @@ namespace DataStructures.Trees
             }
             else if (currentNode.Values[0].CompareTo(val) > 0)
             {
-               currentNode.Left = RemoveRecursive(currentNode.Left, val);
+                currentNode.Left = RemoveRecursive(currentNode.Left, val);
+                if (currentNode.Left != null)
+                {
+                    currentNode.Left.UpdateHeight();
+                    currentNode.Left = Balance(currentNode);
+                }
+                currentNode.UpdateHeight();
+                currentNode = Balance(currentNode);
             }
             else
             {
-                 currentNode.Right = RemoveRecursive(currentNode.Right, val);
+                currentNode.Right = RemoveRecursive(currentNode.Right, val);
+                if (currentNode.Right != null)
+                {
+                    currentNode.Left.UpdateHeight();
+                    currentNode = Balance(currentNode);
+                }
+                currentNode.UpdateHeight();
+                currentNode = Balance(currentNode);
             }
             return currentNode;
         }

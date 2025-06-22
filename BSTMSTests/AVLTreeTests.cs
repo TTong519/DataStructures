@@ -58,12 +58,12 @@ public class AVLTreeTests
     {
         AVLTree<int> tree = new AVLTree<int>();
         Random rand = new Random(seed);
-        tree.Insert(rand.Next());
+        tree.Insert(rand.Next(1, 300));
         int len = rand.Next(1, 30);
         List<int> values = new List<int>();
         for (int i = 0; i < len; i++)
         {
-            int j = rand.Next();
+            int j = rand.Next(1, 300);
             tree.Insert(j);
             values.Add(j);
         }
