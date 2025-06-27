@@ -141,12 +141,16 @@ namespace DataStructures.Trees
                 if (currentNode.Values.Count > 1)
                 {
                     currentNode.Values.Remove(val);
-
                     return currentNode;
                 }
                 else
                 {
                     currentNode = RemoveNode(currentNode);
+                    if(currentNode != null)
+                    {
+                        currentNode.UpdateHeight();
+                        Balance(currentNode);
+                    }
                 }
             }
             else if (currentNode.Values[0].CompareTo(val) > 0)

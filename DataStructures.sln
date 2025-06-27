@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresTests", "BSTMSTests\DataStructuresTests.csproj", "{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banchmarking", "Banchmarking\Banchmarking.csproj", "{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

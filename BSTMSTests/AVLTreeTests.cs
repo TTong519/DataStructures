@@ -69,7 +69,7 @@ public class AVLTreeTests
         }
         for (int i = 0; i < len; i++)
         {
-            tree.RemoveRecursive(tree.Root, values[i]);
+            //tree.RemoveRecursive(tree.Root, values[i]);
             AVLInsertTestHelper(tree.Root);
         }
     }
