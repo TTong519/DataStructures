@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stack_Queue.Trees
 {
-    internal class SkipListNode<T> where T : IComparable<T>
+    public class SkipListNode<T> where T : IComparable<T>
     {
         public T Value;
         public SkipListNode<T> Next;
