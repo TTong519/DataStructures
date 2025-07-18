@@ -8,18 +8,18 @@ namespace Stack_Queue.Trees
 {
     public class SkipListNode<T> where T : IComparable<T>
     {
-        public T Value;
+        public List<T> Values;
         public SkipListNode<T> Next;
         public SkipListNode<T> Down;
         public int Height { get; }
 
-        public SkipListNode(T value)
+        public SkipListNode(List<T> Values)
         {
-            Value = value;
+            this.Values = Values;
         }
-        public SkipListNode(T value, SkipListNode<T> down)
+        public SkipListNode(List<T> Values, SkipListNode<T> down)
         {
-            Value = value;
+            this.Values = Values;
             Down = down;
         }
     }

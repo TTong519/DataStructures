@@ -21,10 +21,10 @@ namespace Stack_Queue.Trees
             Random random = new Random();
             if (random.Next(0, 2) == 1 && height < HeadHeight + 1)
             {
-                newNode = new SkipListNode<T>(node.Value, node);
+                newNode = new SkipListNode<T>(node.Values, node);
                 if (height == HeadHeight)
                 {
-                    HeadTop = new SkipListNode<T>(HeadTop.Value, HeadTop);
+                    HeadTop = new SkipListNode<T>(HeadTop.Values, HeadTop);
                     HeadHeight++;
                     return newNode;
                 }
@@ -33,9 +33,48 @@ namespace Stack_Queue.Trees
             if (newNode == null) return node;
             return newNode;
         }
+        private void InsertRecursive(T value, SkipListNode<T> current)
+        {
+            if (current.Next.Values[0].CompareTo(value) > 0)
+            {
+                if (current.Down == null)
+                {
+                    // Insert at the current level
+                    SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
+                    newNode.Next = current.Next;
+                    current.Next = newNode;
+                }
+                else
+                {
+                    InsertRecursive(value, current.Down);
+                }
+            }
+            else if (current.Next.Values[0].CompareTo(value) == 0)
+            {
+                current.Values.Add(value);
+                return;
+            }
+            else
+            {
+                InsertRecursive(value, current.Next);
+            }
+        }
         public void Insert(T value)
         {
-
+            if (HeadTop == null)
+            {
+                HeadTop = new SkipListNode<T>(new List<T> { value });
+                HeadHeight = 1;
+                return;
+            }
+            if (HeadTop.Values[0].CompareTo(value) > 0)
+            {
+                SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(new List<T> { value }));
+                newNode.Next = HeadTop;
+                HeadTop = newNode;
+                return;
+            }
+            InsertRecursive(value, HeadTop);
         }
     }
 }
