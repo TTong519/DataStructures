@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stack_Queue.Trees
+namespace DataStructures.Trees
 {
     public class SkipList<T> where T : IComparable<T>
     {
@@ -12,8 +12,8 @@ namespace Stack_Queue.Trees
         public int HeadHeight;
         public SkipList()
         {
-            HeadTop = null;
-            HeadHeight = 0;
+            HeadTop = new SkipListNode<T>(default, true);
+            HeadHeight = 1;
         }
         private SkipListNode<T> RandomHeight(SkipListNode<T> node, int height = 0)
         {
@@ -24,7 +24,7 @@ namespace Stack_Queue.Trees
                 newNode = new SkipListNode<T>(node.Values, node);
                 if (height == HeadHeight)
                 {
-                    HeadTop = new SkipListNode<T>(HeadTop.Values, HeadTop);
+                    HeadTop = new SkipListNode<T>(default, HeadTop, true);
                     HeadHeight++;
                     return newNode;
                 }
@@ -35,6 +35,34 @@ namespace Stack_Queue.Trees
         }
         private void InsertRecursive(T value, SkipListNode<T> current)
         {
+            if(current.isSentinel == true)
+            {
+                if(current.Next == null || current.Next.Values[0].CompareTo(value) > 0)
+                {
+                    if(current.Down == null)
+                    {
+                        // Insert at the current level
+                        SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
+                        newNode.Next = current.Next;
+                        current.Next = newNode;
+                    }
+                    else
+                    {
+                        InsertRecursive(value, current.Down);
+                    }
+                    return;
+                }
+                else if (current.Next.Values[0].CompareTo(value) == 0)
+                {
+                    current.Next.Values.Add(value);
+                    return;
+                }
+                else
+                {
+                    InsertRecursive(value, current.Next);
+                    return;
+                }
+            }
             if (current.Next.Values[0].CompareTo(value) > 0)
             {
                 if (current.Down == null)
@@ -63,13 +91,13 @@ namespace Stack_Queue.Trees
         {
             if (HeadTop == null)
             {
-                HeadTop = new SkipListNode<T>(new List<T> { value });
+                HeadTop = new SkipListNode<T>(value);
                 HeadHeight = 1;
                 return;
             }
             if (HeadTop.Values[0].CompareTo(value) > 0)
             {
-                SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(new List<T> { value }));
+                SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
                 newNode.Next = HeadTop;
                 HeadTop = newNode;
                 return;

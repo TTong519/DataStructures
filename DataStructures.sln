@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures", "DataStruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{FEDFBD28-A0BF-4735-A9DA-3914AED41ED0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresTests", "BSTMSTests\DataStructuresTests.csproj", "{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresTests", "DataStructureTests\DataStructuresTests.csproj", "{BC2F2E7A-22B6-4DDB-A5FA-A6DE51E88FBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banchmarking", "Banchmarking\Banchmarking.csproj", "{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}"
 EndProject

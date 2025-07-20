@@ -4,23 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stack_Queue.Trees
+namespace DataStructures.Trees
 {
     public class SkipListNode<T> where T : IComparable<T>
     {
         public List<T> Values;
         public SkipListNode<T> Next;
         public SkipListNode<T> Down;
+        public bool isSentinel;
         public int Height { get; }
 
-        public SkipListNode(List<T> Values)
+        public SkipListNode(T Value, bool isSentinel = false)
         {
-            this.Values = Values;
+            this.Values.Add(Value);
+            this.isSentinel = isSentinel;
         }
-        public SkipListNode(List<T> Values, SkipListNode<T> down)
+        public SkipListNode(List<T> Values, SkipListNode<T> down, bool isSentinel = false)
         {
             this.Values = Values;
             Down = down;
+            this.isSentinel = isSentinel;
         }
     }
 }
