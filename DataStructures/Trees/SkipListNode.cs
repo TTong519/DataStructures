@@ -8,7 +8,7 @@ namespace DataStructures.Trees
 {
     public class SkipListNode<T> where T : IComparable<T>
     {
-        public List<T> Values;
+        public List<T> Values = new List<T>();
         public SkipListNode<T> Next;
         public SkipListNode<T> Down;
         public bool isSentinel;
@@ -16,10 +16,10 @@ namespace DataStructures.Trees
 
         public SkipListNode(T Value, bool isSentinel = false)
         {
-            this.Values.Add(Value);
+            Values.Add(Value);
             this.isSentinel = isSentinel;
         }
-        public SkipListNode(List<T> Values, SkipListNode<T> down, bool isSentinel = false)
+        public SkipListNode(List<T> Values, SkipListNode<T> down,int height, bool isSentinel = false)
         {
             this.Values = Values;
             Down = down;

@@ -9,100 +9,53 @@ namespace DataStructures.Trees
     public class SkipList<T> where T : IComparable<T>
     {
         public SkipListNode<T> HeadTop;
-        public int HeadHeight;
+
         public SkipList()
         {
-            HeadTop = new SkipListNode<T>(default, true);
-            HeadHeight = 1;
+            HeadTop = new SkipListNode<T>(default, null, 1, true);
         }
-        private SkipListNode<T> RandomHeight(SkipListNode<T> node, int height = 0)
+        private int RandomHeight()
         {
-            SkipListNode<T> newNode = null;
-            Random random = new Random();
-            if (random.Next(0, 2) == 1 && height < HeadHeight + 1)
+            int height = 1;
+
+            while (new Random().Next(2) == 0 && height <= HeadTop.Height)
             {
-                newNode = new SkipListNode<T>(node.Values, node);
-                if (height == HeadHeight)
+                height++;
+                if (height > HeadTop.Height)
                 {
-                    HeadTop = new SkipListNode<T>(default, HeadTop, true);
-                    HeadHeight++;
-                    return newNode;
-                }
-                RandomHeight(newNode, height + 1);
-            }
-            if (newNode == null) return node;
-            return newNode;
-        }
-        private void InsertRecursive(T value, SkipListNode<T> current)
-        {
-            if(current.isSentinel == true)
-            {
-                if(current.Next == null || current.Next.Values[0].CompareTo(value) > 0)
-                {
-                    if(current.Down == null)
-                    {
-                        // Insert at the current level
-                        SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
-                        newNode.Next = current.Next;
-                        current.Next = newNode;
-                    }
-                    else
-                    {
-                        InsertRecursive(value, current.Down);
-                    }
-                    return;
-                }
-                else if (current.Next.Values[0].CompareTo(value) == 0)
-                {
-                    current.Next.Values.Add(value);
-                    return;
-                }
-                else
-                {
-                    InsertRecursive(value, current.Next);
-                    return;
+                    HeadTop = new SkipListNode<T>(default, HeadTop, height, true);
                 }
             }
-            if (current.Next.Values[0].CompareTo(value) > 0)
+
+            return height;
+
+        }
+        private SkipListNode<T> InsertRecursive(T value, SkipListNode<T> current, int height)
+        {
+            if (current == null)
             {
-                if (current.Down == null)
+                return null;
+            }
+            if (current.Next == null || current.Next.Values[0].CompareTo(value) > 0)
+            {
+                var temp = InsertRecursive(value, current.Down, height);
+                var newNode = new SkipListNode<T>(new([value]), temp, current.Height);
+                if (current.Height >= height)
                 {
-                    // Insert at the current level
-                    SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
                     newNode.Next = current.Next;
                     current.Next = newNode;
                 }
-                else
-                {
-                    InsertRecursive(value, current.Down);
-                }
-            }
-            else if (current.Next.Values[0].CompareTo(value) == 0)
-            {
-                current.Values.Add(value);
-                return;
+                return newNode;
             }
             else
             {
-                InsertRecursive(value, current.Next);
+                var temp = InsertRecursive(value, current.Next, height);
+                return temp;
             }
         }
         public void Insert(T value)
         {
-            if (HeadTop == null)
-            {
-                HeadTop = new SkipListNode<T>(value);
-                HeadHeight = 1;
-                return;
-            }
-            if (HeadTop.Values[0].CompareTo(value) > 0)
-            {
-                SkipListNode<T> newNode = RandomHeight(new SkipListNode<T>(value));
-                newNode.Next = HeadTop;
-                HeadTop = newNode;
-                return;
-            }
-            InsertRecursive(value, HeadTop);
+            InsertRecursive(value, HeadTop, RandomHeight());
         }
     }
 }
