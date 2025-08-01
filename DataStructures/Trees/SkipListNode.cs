@@ -24,6 +24,7 @@ namespace DataStructures.Trees
             this.Values = Values;
             Down = down;
             this.isSentinel = isSentinel;
+            Height = height;
         }
     }
 }
