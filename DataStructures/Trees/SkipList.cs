@@ -11,13 +11,14 @@ namespace DataStructures.Trees
     {
         public SkipListNode<T> HeadTop;
 
-        public int Count => throw new NotImplementedException();
-
-        public bool IsReadOnly => throw new NotImplementedException();
+        public int Count => count;
+        private int count;
+        public bool IsReadOnly => true;
 
         public SkipList()
         {
             HeadTop = new SkipListNode<T>(default, null, 1, true);
+            count = 0;
         }
         private int RandomHeight()
         {
@@ -53,6 +54,10 @@ namespace DataStructures.Trees
                 {
                     newNode.Next = current.Next;
                     current.Next = newNode;
+                    if(current.Height == 1)
+                    {
+                        count++;
+                    }
                 }
                 return newNode;
             }
@@ -72,11 +77,11 @@ namespace DataStructures.Trees
             {
                 return false;
             }
-            if(current.Next == null || current.Next.Values[0].CompareTo(value) > 0)
+            if (current.Next == null || current.Next.Values[0].CompareTo(value) > 0)
             {
                 return RemoveRecursive(value, current.Down);
             }
-            else if(current.Next.Values[0].CompareTo(value) == 0)
+            else if (current.Next.Values[0].CompareTo(value) == 0)
             {
                 if (current.Next.Values.Count > 1)
                 {
@@ -93,6 +98,10 @@ namespace DataStructures.Trees
                         if (current.Down != null)
                         {
                             RemoveRecursive(value, current.Down);
+                        }
+                        if(current.Height == 1)
+                        {
+                            count--;
                         }
                         return true;
                     }
@@ -136,24 +145,52 @@ namespace DataStructures.Trees
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            HeadTop = new SkipListNode<T>(default, null, 1, true);
+            count = 0;
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex = 0)
         {
-            throw new NotImplementedException();
+            SkipListNode<T> current = HeadTop;
+            while (current.Down != null)
+            {
+                current = current.Down;
+            }
+            current = current.Next;
+            for (int i = 0;i < arrayIndex; i++)
+            {
+                if (current.Next == null) break;
+                current = current.Next;
+            }
+            int j = 0;
+            while (current != null)
+            {
+                foreach (var value in current.Values)
+                {
+                    if (j >= array.Length) break;
+                    array[j] = value;
+                    j++;
+                }
+                current = current.Next;
+            }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
             SkipListNode<T> current = HeadTop;
-
-            for (int i = 0; i < 10; i++)
+            while (current.Down != null)
+            {
+                current = current.Down;
+            }
+            while (current.Next != null)
             {
                 current = current.Next;
-
-                yield return current.Values[0];
+                foreach (var value in current.Values)
+                {
+                    yield return value;
+                }
             }
+
         }
 
         IEnumerator IEnumerable.GetEnumerator()

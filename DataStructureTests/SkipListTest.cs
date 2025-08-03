@@ -16,8 +16,13 @@ public class SkipListTest
     }
         
     [TestMethod]
-    [DataRow(1)]
-    
+    [DataRow(72432)]
+    [DataRow(13455)]
+    [DataRow(47536)]
+    [DataRow(34523)]
+    [DataRow(38457)]
+    [DataRow(35734)]
+
     public void InsertTest(int seed)
     {
         SkipList<Cat> catList =
@@ -44,6 +49,11 @@ public class SkipListTest
             skipList.Insert(value);
             values.Add(value);
         }
+        int[] ints = new int[10];
+        skipList.Remove(36);
+        skipList.Remove(47);
+        skipList.Remove(65);
+        skipList.CopyTo(ints, 0);
         ;
     }
 }
