@@ -51,10 +51,8 @@ namespace DataStructures.Graphs
             }
             return false;
         }
-        public bool AddEdge(T fromValue, T toValue)
+        public bool AddEdge(Vertex<T> fromVertex, Vertex<T> toVertex)
         {
-            var fromVertex = Search(fromValue);
-            var toVertex = Search(toValue);
             if (fromVertex != null && toVertex != null && !fromVertex.Neighbors.Contains(toVertex))
             {
                 fromVertex.Neighbors.Add(toVertex);
@@ -62,10 +60,8 @@ namespace DataStructures.Graphs
             }
             return false;
         }
-        public bool RemoveEdge(T fromValue, T toValue)
+        public bool RemoveEdge(Vertex<T> fromVertex, Vertex<T> toVertex)
         {
-            var fromVertex = Search(fromValue);
-            var toVertex = Search(toValue);
             if (fromVertex != null && toVertex != null && fromVertex.Neighbors.Contains(toVertex))
             {
                 fromVertex.Neighbors.Remove(toVertex);
