@@ -56,6 +56,7 @@ namespace DataStructures.Graphs
             if (fromVertex != null && toVertex != null && !fromVertex.Neighbors.Contains(toVertex))
             {
                 fromVertex.Neighbors.Add(toVertex);
+                toVertex.Neighbors.Add(fromVertex);
                 return true;
             }
             return false;
