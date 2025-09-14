@@ -8,14 +8,14 @@ namespace DataStructures.Graphs
 {
     public class Edge<T>
     {
-        public Vertex<T> StartingPoint { get; set; }
-        public Vertex<T> EndingPoint { get; set; }
+        public DirectedWeightedVertex<T> StartingPoint { get; set; }
+        public DirectedWeightedVertex<T> EndPoint { get; set; }
         public float Distance { get; set; }
 
-        public Edge(Vertex<T> startingPoint, Vertex<T> endingPoint, float distance) 
+        public Edge(DirectedWeightedVertex<T> startingPoint, DirectedWeightedVertex<T> endingPoint, float distance) 
         {
             this.StartingPoint = startingPoint;
-            this.EndingPoint = endingPoint;
+            this.EndPoint = endingPoint;
             this.Distance = distance;
         }
     }
