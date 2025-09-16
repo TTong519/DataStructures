@@ -1,0 +1,327 @@
+[
+  {
+    "Start": "LAX",
+    "End": "SFO",
+    "Distance": 5
+  },
+  {
+    "Start": "LAX",
+    "End": "SMF",
+    "Distance": 8
+  },
+  {
+    "Start": "LAX",
+    "End": "SAN",
+    "Distance": 1
+  },
+  {
+    "Start": "LAX",
+    "End": "JFK",
+    "Distance": 7
+  },
+  {
+    "Start": "LAX",
+    "End": "PHX",
+    "Distance": 2
+  },
+  {
+    "Start": "SFO",
+    "End": "PDX",
+    "Distance": 6
+  },
+  {
+    "Start": "SFO",
+    "End": "LAS",
+    "Distance": 2
+  },
+  {
+    "Start": "SFO",
+    "End": "PHX",
+    "Distance": 3
+  },
+  {
+    "Start": "PDX",
+    "End": "SMF",
+    "Distance": 2
+  },
+  {
+    "Start": "PDX",
+    "End": "SFO",
+    "Distance": 7
+  },
+  {
+    "Start": "SMF",
+    "End": "SEA",
+    "Distance": 7
+  },
+  {
+    "Start": "SMF",
+    "End": "LAS",
+    "Distance": 5
+  },
+  {
+    "Start": "SMF",
+    "End": "SFO",
+    "Distance": 9
+  },
+  {
+    "Start": "SAN",
+    "End": "LAX",
+    "Distance": 10
+  },
+  {
+    "Start": "SAN",
+    "End": "ELP",
+    "Distance": 8
+  },
+  {
+    "Start": "SEA",
+    "End": "SMF",
+    "Distance": 6
+  },
+  {
+    "Start": "SEA",
+    "End": "MSP",
+    "Distance": 10
+  },
+  {
+    "Start": "LAS",
+    "End": "LAX",
+    "Distance": 10
+  },
+  {
+    "Start": "LAS",
+    "End": "SEA",
+    "Distance": 4
+  },
+  {
+    "Start": "LAS",
+    "End": "DEN",
+    "Distance": 8
+  },
+  {
+    "Start": "PHX",
+    "End": "LAS",
+    "Distance": 5
+  },
+  {
+    "Start": "PHX",
+    "End": "LAX",
+    "Distance": 4
+  },
+  {
+    "Start": "ELP",
+    "End": "PHX",
+    "Distance": 1
+  },
+  {
+    "Start": "ELP",
+    "End": "ABQ",
+    "Distance": 8
+  },
+  {
+    "Start": "DEN",
+    "End": "SEA",
+    "Distance": 3
+  },
+  {
+    "Start": "DEN",
+    "End": "LAS",
+    "Distance": 7
+  },
+  {
+    "Start": "DEN",
+    "End": "MKC",
+    "Distance": 4
+  },
+  {
+    "Start": "DEN",
+    "End": "DFW",
+    "Distance": 5
+  },
+  {
+    "Start": "DEN",
+    "End": "STL",
+    "Distance": 3
+  },
+  {
+    "Start": "DEN",
+    "End": "PHX",
+    "Distance": 9
+  },
+  {
+    "Start": "MSP",
+    "End": "LAS",
+    "Distance": 2
+  },
+  {
+    "Start": "MSP",
+    "End": "DEN",
+    "Distance": 7
+  },
+  {
+    "Start": "MSP",
+    "End": "ABQ",
+    "Distance": 8
+  },
+  {
+    "Start": "MSP",
+    "End": "DTW",
+    "Distance": 9
+  },
+  {
+    "Start": "ABQ",
+    "End": "LAS",
+    "Distance": 3
+  },
+  {
+    "Start": "ABQ",
+    "End": "SAT",
+    "Distance": 7
+  },
+  {
+    "Start": "ABQ",
+    "End": "MKC",
+    "Distance": 6
+  },
+  {
+    "Start": "MKC",
+    "End": "ABQ",
+    "Distance": 2
+  },
+  {
+    "Start": "MKC",
+    "End": "MSP",
+    "Distance": 10
+  },
+  {
+    "Start": "MKC",
+    "End": "DFW",
+    "Distance": 3
+  },
+  {
+    "Start": "DFW",
+    "End": "PHX",
+    "Distance": 3
+  },
+  {
+    "Start": "DFW",
+    "End": "SAT",
+    "Distance": 4
+  },
+  {
+    "Start": "DFW",
+    "End": "HOU",
+    "Distance": 5
+  },
+  {
+    "Start": "SAT",
+    "End": "DFW",
+    "Distance": 5
+  },
+  {
+    "Start": "SAT",
+    "End": "ELP",
+    "Distance": 1
+  },
+  {
+    "Start": "SAT",
+    "End": "PHL",
+    "Distance": 5
+  },
+  {
+    "Start": "DTW",
+    "End": "MKC",
+    "Distance": 4
+  },
+  {
+    "Start": "DTW",
+    "End": "JFK",
+    "Distance": 5
+  },
+  {
+    "Start": "MDW",
+    "End": "DTW",
+    "Distance": 5
+  },
+  {
+    "Start": "MDW",
+    "End": "MKC",
+    "Distance": 5
+  },
+  {
+    "Start": "MDW",
+    "End": "IND",
+    "Distance": 5
+  },
+  {
+    "Start": "STL",
+    "End": "DTW",
+    "Distance": 2
+  },
+  {
+    "Start": "STL",
+    "End": "MDW",
+    "Distance": 9
+  },
+  {
+    "Start": "STL",
+    "End": "CVG",
+    "Distance": 5
+  },
+  {
+    "Start": "IND",
+    "End": "STL",
+    "Distance": 7
+  },
+  {
+    "Start": "IND",
+    "End": "CVG",
+    "Distance": 5
+  },
+  {
+    "Start": "IND",
+    "End": "JFK",
+    "Distance": 6
+  },
+  {
+    "Start": "CVG",
+    "End": "JFK",
+    "Distance": 7
+  },
+  {
+    "Start": "JFK",
+    "End": "DFW",
+    "Distance": 10
+  },
+  {
+    "Start": "JFK",
+    "End": "HOU",
+    "Distance": 8
+  },
+  {
+    "Start": "JFK",
+    "End": "SAT",
+    "Distance": 7
+  },
+  {
+    "Start": "JFK",
+    "End": "PHL",
+    "Distance": 2
+  },
+  {
+    "Start": "HOU",
+    "End": "DFW",
+    "Distance": 9
+  },
+  {
+    "Start": "PHL",
+    "End": "DCA",
+    "Distance": 4
+  },
+  {
+    "Start": "DCA",
+    "End": "JFK",
+    "Distance": 3
+  }
+]
