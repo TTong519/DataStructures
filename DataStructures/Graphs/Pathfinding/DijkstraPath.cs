@@ -13,11 +13,9 @@ namespace DataStructures.Graphs.Pathfinding
         {
             this.graph = graph;
         }
-        public List<Node<T>> FindPath(T startVal, T endVal)
+        public List<Node<T>> FindPath(Node<T> startVal, Node<T> endVal)
         {
-            var start = graph.Search(new(startVal));
-            var end = graph.Search(new(endVal));
-            if (start == null || end == null || start == null || end == null)
+            if (startVal == null || endVal == null || startVal == null || endVal == null)
             {
                 return null;
             }
@@ -28,7 +26,7 @@ namespace DataStructures.Graphs.Pathfinding
                 vertex.Value.Founder = null;
                 vertex.Value.Visited = false;
             }
-            start.Value.KnownDistance = 0;
+            startVal.KnownDistance = 0;
             var priorityQueue = new SortedSet<(int distance, Node<T> node)>(Comparer<(int distance, Node<T> node)>.Create((a, b) =>
             {
                 int result = a.distance.CompareTo(b.distance);
@@ -38,7 +36,7 @@ namespace DataStructures.Graphs.Pathfinding
                 }
                 return result;
             }));
-            priorityQueue.Add((0, start.Value));
+            priorityQueue.Add((0, startVal));
             while (priorityQueue.Count > 0)
             {
                 var current = priorityQueue.Min.node;
@@ -48,7 +46,7 @@ namespace DataStructures.Graphs.Pathfinding
                     continue;
                 }
                 current.Visited = true;
-                if (current == end.Value)
+                if (current == endVal)
                 {
                     break;
                 }
@@ -69,12 +67,12 @@ namespace DataStructures.Graphs.Pathfinding
                     }
                 }
             }
-            if (end.Value.Founder == null && start != end)
+            if (endVal.Founder == null && startVal != endVal)
             {
                 return null; // No path found
             }
             var path = new List<Node<T>>();
-            for (var at = end.Value; at != null; at = at.Founder)
+            for (var at = endVal; at != null; at = at.Founder)
             {
                 path.Add(at);
             }

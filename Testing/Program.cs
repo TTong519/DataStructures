@@ -34,8 +34,16 @@ namespace Testing
             {
                 graph.AddEdge(nodes[flight.Start], nodes[flight.End], flight.Distance);
             }
-
-
+            var dijkstra = new DijkstraPath<string>(graph);
+            Node<string> CVG = null;
+            Node<string> IND = null;
+            foreach (var node in nodes)
+            {
+                if(node.Key == "CVG") { CVG = node.Value; }
+                if(node.Key == "IND") { IND = node.Value; }
+            }
+            var path = dijkstra.FindPath(CVG, IND);
+            ;
         }
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresTests", "Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banchmarking", "Banchmarking\Banchmarking.csproj", "{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astar", "Astar\Astar.csproj", "{BC93704D-FF1F-4154-BF2F-0EDD7A447EBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52547CA2-47B3-47AE-AA54-0BC35AEBE23A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC93704D-FF1F-4154-BF2F-0EDD7A447EBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC93704D-FF1F-4154-BF2F-0EDD7A447EBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC93704D-FF1F-4154-BF2F-0EDD7A447EBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC93704D-FF1F-4154-BF2F-0EDD7A447EBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
