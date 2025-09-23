@@ -12,7 +12,7 @@ namespace DataStructures.Graphs.Pathfinding
     [DebuggerDisplay("{Name}")]
     public class Node<T>
     {
-        public T Name;
+        public T Value;
         public int KnownDistance;
         public int FinalDistance;
         public Node<T> Founder;
@@ -23,7 +23,7 @@ namespace DataStructures.Graphs.Pathfinding
             FinalDistance = int.MaxValue;
             Founder = null;
             Visited = false;
-            Name = name;
+            Value = name;
         }
     }
 }
