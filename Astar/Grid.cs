@@ -6,14 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using DataStructures.Graphs;
 using DataStructures.Graphs.Pathfinding;
+using MonoGame.Extended;
+using Microsoft.Xna.Framework;
 
 namespace Astar
 {
     public class Grid
     {
         public Rectangle Size { get; }
-        public DirectedWeightedGraph<Node<Rectangle>> Graph { get; }
-        public Point Dimentions { get; }
+        public DirectedWeightedGraph<Node<Rectangle>> Graph { get; private set; }
+        public Point Dimentions { get; private set; }
+        public List<Rectangle> lastPath { get; private set; }
         public Grid(Rectangle size, Point dimentions) 
         {
             Graph = new DirectedWeightedGraph<Node<Rectangle>>();
@@ -31,15 +34,11 @@ namespace Astar
             }
             foreach (var vertex in Graph.Vertices)
             {
-                foreach (var neighbor in Graph.Vertices)
+                foreach (var neighbor in from neighbor in Graph.Vertices
+                                         where vertex != neighbor && vertex.Value.Value.IntersectsWith(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
+                                         select neighbor)
                 {
-                    if (vertex != neighbor)
-                    {
-                        if (vertex.Value.Value.IntersectsWith(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2)))
-                        {
-                            Graph.AddEdge(vertex.Value, neighbor.Value, 1);
-                        }
-                    }
+                    Graph.AddEdge(vertex.Value, neighbor.Value, 1);
                 }
             }
         }
@@ -58,24 +57,21 @@ namespace Astar
         {
             if (Graph.Search(obstacle) != null)
             {
-                foreach (var vertex in Graph.Vertices)
+                foreach (var (vertex, neighbor) in from vertex in Graph.Vertices
+                                                   where vertex.Value.Value.IntersectsWith(new Rectangle(obstacle.Value.X - 1, obstacle.Value.Y - 1, obstacle.Value.Width + 2, obstacle.Value.Height + 2))
+                                                   from neighbor in vertex.Neighbors
+                                                   select (vertex, neighbor))
                 {
-                    if (vertex.Value.Value.IntersectsWith(new Rectangle(obstacle.Value.X - 1, obstacle.Value.Y - 1, obstacle.Value.Width + 2, obstacle.Value.Height + 2)))
-                    {
-                        foreach (var neighbor in vertex.Neighbors)
-                        {
-                            Graph.AddEdge(vertex.Value, neighbor.EndPoint.Value, 1);
-                            Graph.AddEdge(neighbor.EndPoint.Value, vertex.Value, 1);
-                        }
-                    }
+                    Graph.AddEdge(vertex.Value, neighbor.EndPoint.Value, 1);
+                    Graph.AddEdge(neighbor.EndPoint.Value, vertex.Value, 1);
                 }
             }
         }
-        private float HeuristicCostEstimate(DirectedWeightedVertex<Node<Rectangle>> a, DirectedWeightedVertex<Node<Rectangle>> b)
+        private static float HeuristicCostEstimate(DirectedWeightedVertex<Node<Rectangle>> a, DirectedWeightedVertex<Node<Rectangle>> b)
         {
             return Math.Abs(a.Value.Value.X - b.Value.Value.X) + Math.Abs(a.Value.Value.Y - b.Value.Value.Y);
         }
-        private List<Rectangle> ReconstructPath(Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>> cameFrom, DirectedWeightedVertex<Node<Rectangle>> current)
+        private static List<Rectangle> ReconstructPath(Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>> cameFrom, DirectedWeightedVertex<Node<Rectangle>> current)
         {
             var totalPath = new List<Rectangle> { current.Value.Value };
             while (cameFrom.ContainsKey(current))
@@ -86,13 +82,13 @@ namespace Astar
             totalPath.Reverse();
             return totalPath;
         }
-        public List<Rectangle> AStarPathFind(Node<Rectangle> Start, Node<Rectangle> End)
+        public void AStarPathFind(Node<Rectangle> Start, Node<Rectangle> End)
         {
             var startVertex = Graph.Search(Start);
             var endVertex = Graph.Search(End);
             if (startVertex == null || endVertex == null)
             {
-                return null;
+                lastPath = null;
             }
             var openSet = new List<DirectedWeightedVertex<Node<Rectangle>>> { startVertex };
             var cameFrom = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>>();
@@ -110,7 +106,7 @@ namespace Astar
                 var current = openSet.OrderBy(v => fScore[v]).First();
                 if (current == endVertex)
                 {
-                    return ReconstructPath(cameFrom, current);
+                    lastPath = ReconstructPath(cameFrom, current);
                 }
                 openSet.Remove(current);
                 foreach (var edge in current.Neighbors)
@@ -129,7 +125,14 @@ namespace Astar
                     }
                 }
             }
-            return null;
+            lastPath = null;
+        }
+        public void draw()
+        {
+            foreach (var vertex in Graph.Vertices)
+            {
+                
+            }
         }
     }
 }
