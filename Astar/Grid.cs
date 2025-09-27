@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +34,7 @@ namespace Astar
             foreach (var vertex in Graph.Vertices)
             {
                 foreach (var neighbor in from neighbor in Graph.Vertices
-                                         where vertex != neighbor && vertex.Value.Value.IntersectsWith(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
+                                         where vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
                                          select neighbor)
                 {
                     Graph.AddEdge(vertex.Value, neighbor.Value, 1);
@@ -58,7 +57,7 @@ namespace Astar
             if (Graph.Search(obstacle) != null)
             {
                 foreach (var (vertex, neighbor) in from vertex in Graph.Vertices
-                                                   where vertex.Value.Value.IntersectsWith(new Rectangle(obstacle.Value.X - 1, obstacle.Value.Y - 1, obstacle.Value.Width + 2, obstacle.Value.Height + 2))
+                                                   where vertex.Value.Value.Intersects(new Rectangle(obstacle.Value.X - 1, obstacle.Value.Y - 1, obstacle.Value.Width + 2, obstacle.Value.Height + 2))
                                                    from neighbor in vertex.Neighbors
                                                    select (vertex, neighbor))
                 {
