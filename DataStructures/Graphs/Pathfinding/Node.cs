@@ -9,21 +9,13 @@ using System.Threading.Tasks;
 
 namespace DataStructures.Graphs.Pathfinding
 {
-    [DebuggerDisplay("{Name}")]
-    public class Node<T>
+    [DebuggerDisplay("{Value}")]
+    public class Node<T>(T name)
     {
-        public T Value;
-        public int KnownDistance;
-        public int FinalDistance;
-        public Node<T> Founder;
-        public bool Visited;
-        public Node(T name)
-        {
-            KnownDistance = int.MaxValue;
-            FinalDistance = int.MaxValue;
-            Founder = null;
-            Visited = false;
-            Value = name;
-        }
+        public T Value = name;
+        public int KnownDistance = int.MaxValue;
+        public int FinalDistance = int.MaxValue;
+        public Node<T> Founder = null;
+        public bool Visited = false;
     }
 }

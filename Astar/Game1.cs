@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using DataStructures.Graphs.Pathfinding;
 using DataStructures.Graphs;
 using MonoGame.Extended;
+using System.Linq;
 
 namespace Astar
 {
@@ -18,19 +19,18 @@ namespace Astar
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        Node<Rectangle> start;
+        Node<Rectangle> end;
+        Grid grid;
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            grid = new Grid(new Rectangle(0, 0, 800, 480), new Point(16, 9));
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
@@ -38,18 +38,41 @@ namespace Astar
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            MouseState mouseState = Mouse.GetState();
+            if(mouseState.LeftButton == ButtonState.Pressed)
+            {
+                foreach (var vertex in from vertex in grid.Graph.Vertices
+                                       where vertex.Value.Value.Contains(mouseState.Position)
+                                       select vertex)
+                {
+                    start = vertex.Value;
+                }
+            }
+            else if(mouseState.RightButton == ButtonState.Pressed)
+            {
+                foreach (var vertex in from vertex in grid.Graph.Vertices
+                                       where vertex.Value.Value.Contains(mouseState.Position)
+                                       select vertex)
+                {
+                    end = vertex.Value;
+                }
+            }
+            KeyboardState keyboardState = Keyboard.GetState();
+            if(keyboardState.IsKeyDown(Keys.Space) && start != null && end != null)
+            {
+                grid.AStarPathFind(start, end);
+            }
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
 
-            // TODO: Add your drawing code here
+            grid.Draw(spriteBatch);
 
 
             spriteBatch.End();

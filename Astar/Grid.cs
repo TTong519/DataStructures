@@ -7,6 +7,7 @@ using DataStructures.Graphs;
 using DataStructures.Graphs.Pathfinding;
 using MonoGame.Extended;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Astar
 {
@@ -15,7 +16,7 @@ namespace Astar
         public Rectangle Size { get; }
         public DirectedWeightedGraph<Node<Rectangle>> Graph { get; private set; }
         public Point Dimentions { get; private set; }
-        public List<Rectangle> lastPath { get; private set; }
+        public List<Rectangle> LastPath { get; private set; }
         public Grid(Rectangle size, Point dimentions) 
         {
             Graph = new DirectedWeightedGraph<Node<Rectangle>>();
@@ -27,7 +28,7 @@ namespace Astar
             {
                 for (int x = 0; x < dimentions.X; x++)
                 {
-                    Rectangle cell = new Rectangle(size.X + x * cellWidth, size.Y + y * cellHeight, cellWidth, cellHeight);
+                    Rectangle cell = new(size.X + x * cellWidth, size.Y + y * cellHeight, cellWidth, cellHeight);
                     Graph.AddVertex(new Node<Rectangle>(cell));
                 }
             }
@@ -87,7 +88,7 @@ namespace Astar
             var endVertex = Graph.Search(End);
             if (startVertex == null || endVertex == null)
             {
-                lastPath = null;
+                LastPath = null;
             }
             var openSet = new List<DirectedWeightedVertex<Node<Rectangle>>> { startVertex };
             var cameFrom = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>>();
@@ -105,7 +106,7 @@ namespace Astar
                 var current = openSet.OrderBy(v => fScore[v]).First();
                 if (current == endVertex)
                 {
-                    lastPath = ReconstructPath(cameFrom, current);
+                    LastPath = ReconstructPath(cameFrom, current);
                 }
                 openSet.Remove(current);
                 foreach (var edge in current.Neighbors)
@@ -124,13 +125,20 @@ namespace Astar
                     }
                 }
             }
-            lastPath = null;
+            LastPath = null;
         }
-        public void draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var vertex in Graph.Vertices)
             {
-                
+                spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
+            }
+            if (LastPath != null)
+            {
+                foreach (var rect in LastPath)
+                {
+                    spriteBatch.FillRectangle(rect, Color.Yellow * 0.5f);
+                }
             }
         }
     }

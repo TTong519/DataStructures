@@ -6,17 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataStructures.Graphs
 {
-    public class Edge<T>
+    public class Edge<T>(DirectedWeightedVertex<T> startingPoint, DirectedWeightedVertex<T> endingPoint, float distance)
     {
-        public DirectedWeightedVertex<T> StartingPoint { get; set; }
-        public DirectedWeightedVertex<T> EndPoint { get; set; }
-        public float Distance { get; set; }
-
-        public Edge(DirectedWeightedVertex<T> startingPoint, DirectedWeightedVertex<T> endingPoint, float distance) 
-        {
-            this.StartingPoint = startingPoint;
-            this.EndPoint = endingPoint;
-            this.Distance = distance;
-        }
+        public DirectedWeightedVertex<T> StartingPoint { get; set; } = startingPoint;
+        public DirectedWeightedVertex<T> EndPoint { get; set; } = endingPoint;
+        public float Distance { get; set; } = distance;
     }
 }

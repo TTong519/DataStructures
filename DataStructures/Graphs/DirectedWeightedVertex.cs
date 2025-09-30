@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataStructures.Graphs
 {
-    public class DirectedWeightedVertex<T>
+    public class DirectedWeightedVertex<T>(T value)
     {
-        public T Value { get; set; }
-        public List<Edge<T>> Neighbors { get; set; }
+        public T Value { get; set; } = value;
+        public List<Edge<T>> Neighbors { get; set; } = [];
 
         public int NeighborCount => Neighbors.Count;
-
-        public DirectedWeightedVertex(T value) 
-        {
-            Value = value;
-            Neighbors = new List<Edge<T>>();
-        }
     }
 }
