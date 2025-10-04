@@ -20,6 +20,7 @@ namespace Astar
         public Grid(Rectangle size, Point dimentions) 
         {
             Graph = new DirectedWeightedGraph<Node<Rectangle>>();
+            LastPath = new();
             Size = size;
             Dimentions = dimentions;
             int cellWidth = size.Width / dimentions.X;
@@ -69,6 +70,7 @@ namespace Astar
         }
         private static float HeuristicCostEstimate(DirectedWeightedVertex<Node<Rectangle>> a, DirectedWeightedVertex<Node<Rectangle>> b)
         {
+
             return Math.Abs(a.Value.Value.X - b.Value.Value.X) + Math.Abs(a.Value.Value.Y - b.Value.Value.Y);
         }
         private static List<Rectangle> ReconstructPath(Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>> cameFrom, DirectedWeightedVertex<Node<Rectangle>> current)
@@ -86,59 +88,79 @@ namespace Astar
         {
             var startVertex = Graph.Search(Start);
             var endVertex = Graph.Search(End);
+
             if (startVertex == null || endVertex == null)
             {
                 LastPath = null;
             }
+
             var openSet = new List<DirectedWeightedVertex<Node<Rectangle>>> { startVertex };
             var cameFrom = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>>();
             var gScore = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, float>();
             var fScore = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, float>();
+
             foreach (var vertex in Graph.Vertices)
             {
                 gScore[vertex] = float.MaxValue;
                 fScore[vertex] = float.MaxValue;
             }
+
             gScore[startVertex] = 0;
             fScore[startVertex] = HeuristicCostEstimate(startVertex, endVertex);
+
             while (openSet.Count > 0)
             {
                 var current = openSet.OrderBy(v => fScore[v]).First();
                 if (current == endVertex)
                 {
                     LastPath = ReconstructPath(cameFrom, current);
+                    break;
                 }
+
                 openSet.Remove(current);
+
                 foreach (var edge in current.Neighbors)
                 {
                     var neighbor = edge.EndPoint;
+
+                    if(neighbor.Value.Visited) continue;
+
                     float tentativeGScore = gScore[current] + edge.Distance;
+
                     if (tentativeGScore < gScore[neighbor])
                     {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
                         fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endVertex);
+
                         if (!openSet.Contains(neighbor))
                         {
                             openSet.Add(neighbor);
                         }
                     }
                 }
+                current.Value.Visited = true;
             }
-            LastPath = null;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (LastPath != null)
+            {
+                foreach (var thing in Graph.Vertices)
+                {
+                    if (LastPath.Contains(thing.Value.Value) || !thing.Value.Visited) continue;
+                    var rect = thing.Value.Value;
+
+                    spriteBatch.FillRectangle(rect, Color.Red * 0.5f);
+                }
+                foreach (var rect in LastPath)
+                {
+                    spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
+                }
+            }
             foreach (var vertex in Graph.Vertices)
             {
                 spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
-            }
-            if (LastPath != null)
-            {
-                foreach (var rect in LastPath)
-                {
-                    spriteBatch.FillRectangle(rect, Color.Yellow * 0.5f);
-                }
             }
         }
     }

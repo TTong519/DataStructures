@@ -24,7 +24,7 @@ namespace Astar
         Grid grid;
         protected override void Initialize()
         {
-            grid = new Grid(new Rectangle(0, 0, 800, 480), new Point(16, 9));
+            grid = new Grid(new Rectangle(0, 0, 800, 480), new Point(4, 4));
             base.Initialize();
         }
 
