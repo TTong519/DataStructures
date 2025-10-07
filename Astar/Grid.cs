@@ -70,8 +70,11 @@ namespace Astar
         }
         private static float HeuristicCostEstimate(DirectedWeightedVertex<Node<Rectangle>> a, DirectedWeightedVertex<Node<Rectangle>> b)
         {
+            //TODO: Change to Octile Distance
+            Point apos = new(a.Value.Value.X/a.Value.Value.Width, a.Value.Value.Y/a.Value.Value.Height);
+            Point bpos = new(b.Value.Value.X/b.Value.Value.Width, b.Value.Value.Y/b.Value.Value.Height);
 
-            return Math.Abs(a.Value.Value.X - b.Value.Value.X) + Math.Abs(a.Value.Value.Y - b.Value.Value.Y);
+            return (Math.Abs(apos.X - bpos.X) + Math.Abs(apos.Y - bpos.Y)) - Math.Min(Math.Abs(apos.X - bpos.X), Math.Abs(apos.Y - bpos.Y));
         }
         private static List<Rectangle> ReconstructPath(Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>> cameFrom, DirectedWeightedVertex<Node<Rectangle>> current)
         {
@@ -123,27 +126,28 @@ namespace Astar
                 {
                     var neighbor = edge.EndPoint;
 
-                    if(neighbor.Value.Visited) continue;
+                    //if (neighbor.Value.Visited) continue;
 
                     float tentativeGScore = gScore[current] + edge.Distance;
 
                     if (tentativeGScore < gScore[neighbor])
                     {
+                        neighbor.Value.Visited = false;
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
                         fScore[neighbor] = gScore[neighbor] + HeuristicCostEstimate(neighbor, endVertex);
+                    }
 
-                        if (!openSet.Contains(neighbor))
-                        {
-                            openSet.Add(neighbor);
-                        }
+                    if (!openSet.Contains(neighbor) && !neighbor.Value.Visited)
+                    {
+                        openSet.Add(neighbor);
                     }
                 }
                 current.Value.Visited = true;
             }
         }
         public void Draw(SpriteBatch spriteBatch)
-        {
+        {      
             if (LastPath != null)
             {
                 foreach (var thing in Graph.Vertices)
@@ -158,6 +162,7 @@ namespace Astar
                     spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
                 }
             }
+
             foreach (var vertex in Graph.Vertices)
             {
                 spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
