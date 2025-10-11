@@ -37,28 +37,51 @@ namespace Astar
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            MouseState mouseState = Mouse.GetState();
-            if(mouseState.LeftButton == ButtonState.Pressed)
-            {
-                foreach (var vertex in from vertex in grid.Graph.Vertices
-                                       where vertex.Value.Value.Contains(mouseState.Position)
-                                       select vertex)
-                {
-                    start = vertex.Value;
-                }
-            }
-            else if(mouseState.RightButton == ButtonState.Pressed)
-            {
-                foreach (var vertex in from vertex in grid.Graph.Vertices
-                                       where vertex.Value.Value.Contains(mouseState.Position)
-                                       select vertex)
-                {
-                    end = vertex.Value;
-                }
-            }
             KeyboardState keyboardState = Keyboard.GetState();
-            if(keyboardState.IsKeyDown(Keys.Space) && start != null && end != null)
+            MouseState mouseState = Mouse.GetState();
+            if (!keyboardState.IsKeyDown(Keys.LeftControl))
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    foreach (var vertex in from vertex in grid.Graph.Vertices
+                                           where vertex.Value.Value.Contains(mouseState.Position)
+                                           select vertex)
+                    {
+                        start = vertex.Value;
+                    }
+                }
+                else if (mouseState.RightButton == ButtonState.Pressed)
+                {
+                    foreach (var vertex in from vertex in grid.Graph.Vertices
+                                           where vertex.Value.Value.Contains(mouseState.Position)
+                                           select vertex)
+                    {
+                        end = vertex.Value;
+                    }
+                }
+            }
+            else
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    foreach (var vertex in from vertex in grid.Graph.Vertices
+                                           where vertex.Value.Value.Contains(mouseState.Position)
+                                           select vertex)
+                    {
+                        grid.AddObstacle(vertex.Value);
+                    }
+                }
+                else if (mouseState.RightButton == ButtonState.Pressed)
+                {
+                    foreach (var vertex in from vertex in grid.Graph.Vertices
+                                           where vertex.Value.Value.Contains(mouseState.Position)
+                                           select vertex)
+                    {
+                        grid.RemoveObstacle(vertex.Value);
+                    }
+                }
+            }
+            if (keyboardState.IsKeyDown(Keys.Space) && start != null && end != null)
             {
                 grid.AStarPathFind(start, end);
             }

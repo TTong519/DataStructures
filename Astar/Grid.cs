@@ -13,6 +13,8 @@ namespace Astar
 {
     public class Grid
     {
+        static float Sqrt2 = (float)Math.Sqrt(2);
+
         public Rectangle Size { get; }
         public DirectedWeightedGraph<Node<Rectangle>> Graph { get; private set; }
         public Point Dimentions { get; private set; }
@@ -39,18 +41,22 @@ namespace Astar
                                          where vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
                                          select neighbor)
                 {
-                    Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                    if(neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
+                        Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                    else
+                        Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
                 }
             }
         }
         public void AddObstacle(Node<Rectangle> obstacle)
         {
-            if (Graph.Search(obstacle) != null)
+            var vertex = Graph.Search(obstacle);
+            if (vertex != null)
             {
-                foreach(var thing in Graph.Search(obstacle).Neighbors)
+                for(int i = 0; i < vertex.NeighborCount; i++)
                 {
-                    Graph.RemoveEdge(thing.StartingPoint.Value, thing.EndPoint.Value);
-                    Graph.RemoveEdge(thing.EndPoint.Value, thing.StartingPoint.Value);
+                    Graph.RemoveEdge(vertex.Neighbors[i].EndPoint.Value, obstacle);
+                    Graph.RemoveEdge(obstacle, vertex.Neighbors[i].EndPoint.Value);
                 }
             }
         }
@@ -58,23 +64,24 @@ namespace Astar
         {
             if (Graph.Search(obstacle) != null)
             {
-                foreach (var (vertex, neighbor) in from vertex in Graph.Vertices
-                                                   where vertex.Value.Value.Intersects(new Rectangle(obstacle.Value.X - 1, obstacle.Value.Y - 1, obstacle.Value.Width + 2, obstacle.Value.Height + 2))
-                                                   from neighbor in vertex.Neighbors
-                                                   select (vertex, neighbor))
+                var vertex = Graph.Search(obstacle);
+                foreach (var neighbor in from neighbor in Graph.Vertices
+                                         where vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
+                                         select neighbor)
                 {
-                    Graph.AddEdge(vertex.Value, neighbor.EndPoint.Value, 1);
-                    Graph.AddEdge(neighbor.EndPoint.Value, vertex.Value, 1);
+                    if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
+                        Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                    else
+                        
+                        Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
                 }
             }
         }
         private static float HeuristicCostEstimate(DirectedWeightedVertex<Node<Rectangle>> a, DirectedWeightedVertex<Node<Rectangle>> b)
         {
-            //TODO: Change to Octile Distance
             Point apos = new(a.Value.Value.X/a.Value.Value.Width, a.Value.Value.Y/a.Value.Value.Height);
             Point bpos = new(b.Value.Value.X/b.Value.Value.Width, b.Value.Value.Y/b.Value.Value.Height);
-
-            return (Math.Abs(apos.X - bpos.X) + Math.Abs(apos.Y - bpos.Y)) - Math.Min(Math.Abs(apos.X - bpos.X), Math.Abs(apos.Y - bpos.Y));
+            return (Math.Abs(apos.X - bpos.X) + Math.Abs(apos.Y - bpos.Y)) + (Sqrt2 - 2) * Math.Min(Math.Abs(apos.X - bpos.X), Math.Abs(apos.Y - bpos.Y));
         }
         private static List<Rectangle> ReconstructPath(Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>> cameFrom, DirectedWeightedVertex<Node<Rectangle>> current)
         {
@@ -155,16 +162,21 @@ namespace Astar
                     if (LastPath.Contains(thing.Value.Value) || !thing.Value.Visited) continue;
                     var rect = thing.Value.Value;
 
-                    spriteBatch.FillRectangle(rect, Color.Red * 0.5f);
+                    spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
                 }
                 foreach (var rect in LastPath)
                 {
-                    spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
+                    spriteBatch.FillRectangle(rect, Color.Green * 0.5f);
                 }
             }
 
             foreach (var vertex in Graph.Vertices)
             {
+                if(vertex.NeighborCount == 0)
+                {
+                    spriteBatch.FillRectangle(vertex.Value.Value, Color.Red * 0.5f);
+                    continue;
+                }
                 spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
             }
         }
