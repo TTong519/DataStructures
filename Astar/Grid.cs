@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataStructures.Graphs;
 using DataStructures.Graphs.Pathfinding;
 using MonoGame.Extended;
@@ -13,23 +11,23 @@ namespace Astar
 {
     public class Grid
     {
-        static float Sqrt2 = (float)Math.Sqrt(2);
+        static readonly float Sqrt2 = (float)Math.Sqrt(2);
 
         public Rectangle Size { get; }
         public DirectedWeightedGraph<Node<Rectangle>> Graph { get; private set; }
-        public Point Dimentions { get; private set; }
-        public List<Rectangle> LastPath { get; private set; }
-        public Grid(Rectangle size, Point dimentions) 
+        public Point Dimensions { get; private set; }
+        private List<Rectangle> LastPath { get; set; }
+        public Grid(Rectangle size, Point dimensions) 
         {
             Graph = new DirectedWeightedGraph<Node<Rectangle>>();
             LastPath = new();
             Size = size;
-            Dimentions = dimentions;
-            int cellWidth = size.Width / dimentions.X;
-            int cellHeight = size.Height / dimentions.Y;
-            for (int y = 0; y < dimentions.Y; y++)
+            Dimensions = dimensions;
+            int cellWidth = size.Width / dimensions.X;
+            int cellHeight = size.Height / dimensions.Y;
+            for (int y = 0; y < dimensions.Y; y++)
             {
-                for (int x = 0; x < dimentions.X; x++)
+                for (int x = 0; x < dimensions.X; x++)
                 {
                     Rectangle cell = new(size.X + x * cellWidth, size.Y + y * cellHeight, cellWidth, cellHeight);
                     Graph.AddVertex(new Node<Rectangle>(cell));
@@ -72,7 +70,6 @@ namespace Astar
                     if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
                         Graph.AddEdge(vertex.Value, neighbor.Value, 1);
                     else
-                        
                         Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
                 }
             }
@@ -94,30 +91,26 @@ namespace Astar
             totalPath.Reverse();
             return totalPath;
         }
-        public void AStarPathFind(Node<Rectangle> Start, Node<Rectangle> End)
+        public void AStarPathFind(Node<Rectangle> start, Node<Rectangle> end)
         {
-            var startVertex = Graph.Search(Start);
-            var endVertex = Graph.Search(End);
-
+            var startVertex = Graph.Search(start);
+            var endVertex = Graph.Search(end);
             if (startVertex == null || endVertex == null)
             {
                 LastPath = null;
             }
-
             var openSet = new List<DirectedWeightedVertex<Node<Rectangle>>> { startVertex };
             var cameFrom = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, DirectedWeightedVertex<Node<Rectangle>>>();
             var gScore = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, float>();
             var fScore = new Dictionary<DirectedWeightedVertex<Node<Rectangle>>, float>();
-
             foreach (var vertex in Graph.Vertices)
             {
                 gScore[vertex] = float.MaxValue;
                 fScore[vertex] = float.MaxValue;
+                vertex.Value.Visited = false;
             }
-
             gScore[startVertex] = 0;
             fScore[startVertex] = HeuristicCostEstimate(startVertex, endVertex);
-
             while (openSet.Count > 0)
             {
                 var current = openSet.OrderBy(v => fScore[v]).First();
@@ -126,14 +119,10 @@ namespace Astar
                     LastPath = ReconstructPath(cameFrom, current);
                     break;
                 }
-
                 openSet.Remove(current);
-
                 foreach (var edge in current.Neighbors)
                 {
                     var neighbor = edge.EndPoint;
-
-                    //if (neighbor.Value.Visited) continue;
 
                     float tentativeGScore = gScore[current] + edge.Distance;
 
