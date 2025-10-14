@@ -17,10 +17,12 @@ namespace Astar
         public DirectedWeightedGraph<Node<Rectangle>> Graph { get; private set; }
         public Point Dimensions { get; private set; }
         private List<Rectangle> LastPath { get; set; }
+        public Queue<List<(int, Rectangle)>> animQueue = new();
+        private List<(int, Rectangle)> currentAnimStep = new();
         public Grid(Rectangle size, Point dimensions) 
         {
             Graph = new DirectedWeightedGraph<Node<Rectangle>>();
-            LastPath = new();
+            LastPath = [];
             Size = size;
             Dimensions = dimensions;
             int cellWidth = size.Width / dimensions.X;
@@ -35,14 +37,15 @@ namespace Astar
             }
             foreach (var vertex in Graph.Vertices)
             {
-                foreach (var neighbor in from neighbor in Graph.Vertices
-                                         where vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
-                                         select neighbor)
+                foreach (var neighbor in Graph.Vertices)
                 {
-                    if(neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
-                        Graph.AddEdge(vertex.Value, neighbor.Value, 1);
-                    else
-                        Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
+                    if (vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2)))
+                    {
+                        if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
+                            Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                        else
+                            Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
+                    }
                 }
             }
         }
@@ -63,14 +66,15 @@ namespace Astar
             if (Graph.Search(obstacle) != null)
             {
                 var vertex = Graph.Search(obstacle);
-                foreach (var neighbor in from neighbor in Graph.Vertices
-                                         where vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2))
-                                         select neighbor)
+                foreach (var neighbor in Graph.Vertices)
                 {
-                    if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
-                        Graph.AddEdge(vertex.Value, neighbor.Value, 1);
-                    else
-                        Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
+                    if (vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2)))
+                    {
+                        if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
+                            Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                        else
+                            Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
+                    }
                 }
             }
         }
@@ -139,18 +143,26 @@ namespace Astar
                         openSet.Add(neighbor);
                     }
                 }
+                List<(int, Rectangle)> animStep = new();
+                foreach (var vertex in Graph.Vertices)
+                {
+                    if (openSet.Contains(vertex))
+                        animStep.Add((1, vertex.Value.Value));
+                    else if (vertex.Value.Visited)
+                        animStep.Add((2, vertex.Value.Value));
+                }
+                animQueue.Enqueue(animStep);
                 current.Value.Visited = true;
             }
         }
-        public void Draw(SpriteBatch spriteBatch)
-        {      
-            if (LastPath != null)
+        public void Draw(SpriteBatch spriteBatch, int isAnim)
+        {
+            if (LastPath != null && animQueue.Count == 0)
             {
                 foreach (var thing in Graph.Vertices)
                 {
                     if (LastPath.Contains(thing.Value.Value) || !thing.Value.Visited) continue;
                     var rect = thing.Value.Value;
-
                     spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
                 }
                 foreach (var rect in LastPath)
@@ -167,6 +179,17 @@ namespace Astar
                     continue;
                 }
                 spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
+            }
+            foreach (var (state, rect) in currentAnimStep)
+            {
+                if (state == 1)
+                    spriteBatch.FillRectangle(rect, Color.Orange * 0.5f);
+                else if (state == 2)
+                    spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
+            }
+            if (isAnim == 1 && animQueue.Count > 0)
+            {
+                currentAnimStep = animQueue.Dequeue();
             }
         }
     }

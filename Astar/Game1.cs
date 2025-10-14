@@ -5,6 +5,7 @@ using DataStructures.Graphs.Pathfinding;
 using DataStructures.Graphs;
 using MonoGame.Extended;
 using System.Linq;
+using System;
 
 namespace Astar
 {
@@ -33,12 +34,25 @@ namespace Astar
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
+        TimeSpan elapsedTime = TimeSpan.Zero;
+        TimeSpan interval = TimeSpan.FromSeconds(2);
+        int thing = 0;
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             KeyboardState keyboardState = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
+
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            if (elapsedTime >= interval)
+            { 
+                elapsedTime = TimeSpan.Zero;
+                thing = 1;
+            }
+
             if (!keyboardState.IsKeyDown(Keys.LeftControl))
             {
                 if (mouseState.LeftButton == ButtonState.Pressed)
@@ -93,11 +107,8 @@ namespace Astar
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-
-
-            grid.Draw(spriteBatch);
-
-
+            grid.Draw(spriteBatch, thing);
+            thing = 0;
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -118,14 +118,15 @@ namespace DataStructures.Graphs
                     return path;
                 }
 
-                foreach (var neighbor in from edge in current.Neighbors
-                                         let neighbor = edge.EndPoint
-                                         where !visited.Contains(neighbor)
-                                         select neighbor)
+                foreach (var edge in current.Neighbors)
                 {
-                    visited.Add(neighbor);
-                    parentMap[neighbor] = current;
-                    stack.Push(neighbor);
+                    var neighbor = edge.EndPoint;
+                    if (!visited.Contains(neighbor))
+                    {
+                        visited.Add(neighbor);
+                        parentMap[neighbor] = current;
+                        stack.Push(neighbor);
+                    }
                 }
             }
             return [];
@@ -155,14 +156,15 @@ namespace DataStructures.Graphs
                     return path;
                 }
 
-                foreach (var neighbor in from edge in current.Neighbors
-                                         let neighbor = edge.EndPoint
-                                         where !visited.Contains(neighbor)
-                                         select neighbor)
+                foreach (var edge in current.Neighbors)
                 {
-                    visited.Add(neighbor);
-                    parentMap[neighbor] = current;
-                    queue.Enqueue(neighbor);
+                    var neighbor = edge.EndPoint;
+                    if (!visited.Contains(neighbor))
+                    {
+                        visited.Add(neighbor);
+                        parentMap[neighbor] = current;
+                        queue.Enqueue(neighbor);
+                    }
                 }
             }
             return [];
