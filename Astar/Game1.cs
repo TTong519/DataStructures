@@ -13,7 +13,7 @@ namespace Astar
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-
+        bool thingy = false;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -35,7 +35,7 @@ namespace Astar
         }
 
         TimeSpan elapsedTime = TimeSpan.Zero;
-        TimeSpan interval = TimeSpan.FromSeconds(2);
+        TimeSpan interval = TimeSpan.FromSeconds(0.5);
         int thing = 0;
 
         protected override void Update(GameTime gameTime)
@@ -97,7 +97,15 @@ namespace Astar
             }
             if (keyboardState.IsKeyDown(Keys.Space) && start != null && end != null)
             {
-                grid.AStarPathFind(start, end);
+                thingy = true;
+            }
+            if (keyboardState.IsKeyUp(Keys.Space))
+            {
+                if(thingy && start != null && end != null)
+                {
+                    grid.AStarPathFind(start, end);
+                }
+                thingy = false;
             }
 
             base.Update(gameTime);
@@ -107,6 +115,10 @@ namespace Astar
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+            if(start != null)
+                spriteBatch.FillRectangle(start.Value, Color.Beige * 0.5f);
+            if(end != null)
+                spriteBatch.FillRectangle(end.Value, Color.Beige * 0.5f);
             grid.Draw(spriteBatch, thing);
             thing = 0;
             spriteBatch.End();

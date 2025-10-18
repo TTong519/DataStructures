@@ -70,10 +70,17 @@ namespace Astar
                 {
                     if (vertex != neighbor && vertex.Value.Value.Intersects(new Rectangle(neighbor.Value.Value.X - 1, neighbor.Value.Value.Y - 1, neighbor.Value.Value.Width + 2, neighbor.Value.Value.Height + 2)))
                     {
+                        if (neighbor.NeighborCount == 0) continue;
                         if (neighbor.Value.Value.X == vertex.Value.Value.X || neighbor.Value.Value.Y == vertex.Value.Value.Y)
+                        {
                             Graph.AddEdge(vertex.Value, neighbor.Value, 1);
+                            Graph.AddEdge(neighbor.Value, vertex.Value, 1);
+                        }
                         else
+                        {
                             Graph.AddEdge(vertex.Value, neighbor.Value, Sqrt2);
+                            Graph.AddEdge(neighbor.Value, vertex.Value, Sqrt2);
+                        }
                     }
                 }
             }
@@ -97,6 +104,7 @@ namespace Astar
         }
         public void AStarPathFind(Node<Rectangle> start, Node<Rectangle> end)
         {
+            animQueue.Clear();
             var startVertex = Graph.Search(start);
             var endVertex = Graph.Search(end);
             if (startVertex == null || endVertex == null)
@@ -151,9 +159,11 @@ namespace Astar
                     else if (vertex.Value.Visited)
                         animStep.Add((2, vertex.Value.Value));
                 }
+                animStep.Add((0, current.Value.Value));
                 animQueue.Enqueue(animStep);
                 current.Value.Visited = true;
             }
+            animQueue.Enqueue(null);
         }
         public void Draw(SpriteBatch spriteBatch, int isAnim)
         {
@@ -180,12 +190,17 @@ namespace Astar
                 }
                 spriteBatch.DrawRectangle(vertex.Value.Value, Color.Gray);
             }
-            foreach (var (state, rect) in currentAnimStep)
+            if (currentAnimStep != null)
             {
-                if (state == 1)
-                    spriteBatch.FillRectangle(rect, Color.Orange * 0.5f);
-                else if (state == 2)
-                    spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
+                foreach (var (state, rect) in currentAnimStep)
+                {
+                    if (state == 1)
+                        spriteBatch.FillRectangle(rect, Color.Orange * 0.5f);
+                    else if (state == 2)
+                        spriteBatch.FillRectangle(rect, Color.Blue * 0.5f);
+                    else if (state == 0)
+                        spriteBatch.FillRectangle(rect, Color.Aqua * 0.5f);
+                }
             }
             if (isAnim == 1 && animQueue.Count > 0)
             {
