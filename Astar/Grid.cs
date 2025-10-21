@@ -105,6 +105,7 @@ namespace Astar
         public void AStarPathFind(Node<Rectangle> start, Node<Rectangle> end)
         {
             animQueue.Clear();
+            LastPath = null;
             var startVertex = Graph.Search(start);
             var endVertex = Graph.Search(end);
             if (startVertex == null || endVertex == null)
