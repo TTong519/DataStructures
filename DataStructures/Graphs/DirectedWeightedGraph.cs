@@ -21,14 +21,7 @@ namespace DataStructures.Graphs
         }
         public DirectedWeightedVertex<T> Search(T value)
         {
-            foreach (var vertex in from vertex in vertices
-                                   where vertex.Value.Equals(value)
-                                   select vertex)
-            {
-                return vertex;
-            }
-
-            return null;
+            return vertices.FirstOrDefault(x => x.Value.Equals(value));
         }
         public Edge<T> GetEdge(T from, T to)
         {

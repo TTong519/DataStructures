@@ -10,12 +10,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DataStructures.Graphs.Pathfinding
 {
-    public static class FellmanBord<T> where T : INullable
+    public static class FellmanBord<T>
     {
         public static bool Compute(DirectedWeightedGraph<T> Graph, T startValue)
         {
             Dictionary<T, float> Distance = [];
-            if (Graph.Search(startValue) == null || startValue.IsNull)
+            if (Graph.Search(startValue) == null)
             {
                 return false;
             }
