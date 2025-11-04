@@ -14,7 +14,11 @@ namespace DataStructures.Graphs.Pathfinding
     {
         public static bool Compute(DirectedWeightedGraph<T> Graph, T startValue)
         {
-            Dictionary<T, float> Distance = Graph.Vertices.ToDictionary(vertex => vertex.Value, _ => float.MaxValue);
+            Dictionary<T, float> Distance = [];
+            if (Graph.Search(startValue) == null)
+            {
+                return false;
+            }
             Distance[startValue] = 0;
             int vertexCount = Graph.VertexCount;
             for (int i = 1; i <= vertexCount - 1; i++)
@@ -37,10 +41,10 @@ namespace DataStructures.Graphs.Pathfinding
                 float weight = edge.Distance;
                 if (Distance[u] != float.MaxValue && Distance[u] + weight < Distance[v])
                 {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
     }
 }
