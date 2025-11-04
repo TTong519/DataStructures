@@ -11,7 +11,10 @@ namespace DataStructures.Graphs
         private readonly List<DirectedWeightedVertex<T>> vertices;
 
         public IReadOnlyList<DirectedWeightedVertex<T>> Vertices => vertices;
-        public IReadOnlyList<Edge<T>> Edges { get { foreach (var item in vertices) { new List<Edge<T>>().AddRange(from item1 in item.Neighbors where !new List<Edge<T>>().Contains(item1) select item1); } return []; } }
+        public IReadOnlyList<Edge<T>> Edges { get { var boppity = new List<Edge<T>>(); 
+                foreach (var item in vertices) 
+                { boppity.AddRange(item.Neighbors); } 
+                return boppity; }}
 
         public int VertexCount => vertices.Count;
 

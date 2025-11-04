@@ -26,6 +26,39 @@ public class FellmanBordTests
             Assert.Fail("Fellman-Bord algorithm did not return the expected result.");
         }
     }
+        // Create a small graph
+        var graph = new DirectedWeightedGraph<int>();
+
+        // Add vertices
+        graph.AddVertex(1);
+        graph.AddVertex(2);
+        graph.AddVertex(3);
+        graph.AddVertex(4);
+        graph.AddVertex(5);
+
+        // Add edges with weights
+        graph.AddEdge(1, 2, 1);  // Positive weight
+        graph.AddEdge(2, 3, 1);  // Positive weight
+        graph.AddEdge(4, 2, 1);  // Positive weight
+        graph.AddEdge(2, 5, -1);  // Positive weight
+        graph.AddEdge(5, 4, 1);  // Positive weight
+
+        // Run the Fellman-Bord algorithm
+        bool result = FellmanBord<int>.Compute(graph, 1);
+
+        // Assert that there is no negative cycle
+        Assert.IsFalse(result, "The graph should not contain a negative cycle.");
+
+        // Add a negative cycle
+        graph.RemoveEdge(2, 5);
+        graph.AddEdge(2, 5, -10);
+
+        // Run the algorithm again
+        result = FellmanBord<int>.Compute(graph, 1);
+
+        // Assert that the graph contains a negative cycle
+        Assert.IsTrue(result, "The graph should contain a negative cycle.");
+    }
     (DirectedWeightedGraph<int>, bool) generateGraph()
     {
         Random rand = new Random(Seed);
