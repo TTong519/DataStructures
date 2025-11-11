@@ -20,22 +20,6 @@ public class FellmanBordTests
     [TestMethod]
     public void FellmanBordTest()
     {
-        // Create a small graph
-        var graph = new DirectedWeightedGraph<int>();
-
-        // Add vertices
-        graph.AddVertex(1);
-        graph.AddVertex(2);
-        graph.AddVertex(3);
-        graph.AddVertex(4);
-        graph.AddVertex(5);
-
-        // Add edges with weights
-        graph.AddEdge(1, 2, 1);  // Positive weight
-        graph.AddEdge(2, 3, 1);  // Positive weight
-        graph.AddEdge(4, 2, 1);  // Positive weight
-        graph.AddEdge(2, 5, -1);  // Positive weight
-        graph.AddEdge(5, 4, 1);  // Positive weight
 
     }
     (DirectedWeightedGraph<int>, bool) generateGraph()
