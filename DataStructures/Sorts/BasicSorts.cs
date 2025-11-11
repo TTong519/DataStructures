@@ -78,6 +78,38 @@ namespace DataStructures.Sorts
             }
             return array;
         }
+
+        // New overload: Insertion sort that accepts a custom Comparison<T>
+        public static T[] InsertionSort<T>(T[] array, Comparison<T> comparer)
+        {
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                for (int j = i + 1; j > 0; j--)
+                {
+                    if (comparer(array[j], array[j - 1]) < 0)
+                    {
+                        Swap(array, j, j - 1);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            return array;
+        }
+
+        // Convenience overload: accepts an IComparer<T> (falls back to Comparer<T>.Default when null)
+        public static T[] InsertionSort<T>(T[] array, IComparer<T> comparer)
+        {
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            comparer ??= Comparer<T>.Default;
+            return InsertionSort(array, comparer.Compare);
+        }
+
         static void Main(string[] args)
         {
             SortTest(BubbleSort);
