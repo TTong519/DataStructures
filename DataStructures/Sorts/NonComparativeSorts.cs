@@ -9,8 +9,10 @@ namespace DataStructures.Sorts
 {
     public static class NonComparativeSorts
     {
-        public static List<int> CountingSort(List<int> toSort, int maxValue)
+        public static List<int> CountingSort(List<int> toSort)
         {
+            int maxValue = toSort.Max();
+
             List<int> counts = new(maxValue + 1);
             for (int i = 0; i <= maxValue; i++)
             {
@@ -44,9 +46,13 @@ namespace DataStructures.Sorts
             }
             int min = itemKeys.Values.Min();
             int max = itemKeys.Values.Max();
+            int bucketSize = (max - min) / buckets.Length;
             foreach (var item in items)
             {
-                int bucketIndex = (keySelector(item) - min) / buckets.Length;
+                int bucketIndex = (keySelector(item) - min) / bucketSize;
+
+                if (bucketIndex == buckets.Length) bucketIndex -= 1;
+
                 buckets[bucketIndex].Add(item);
             }
             for(int i = 0; i < buckets.Length; i++)
@@ -60,6 +66,29 @@ namespace DataStructures.Sorts
                 {
                     items.Add(buckets[i][j]);
                 }
+            }
+        }
+        public static void RadixSort<T>(List<T> data, Func<T, int> keySelector)
+        {
+            int[] buckets = new int[10];
+            Dictionary<T, int> itemKeys = new();
+            Dictionary<T, int> keyDigits = new();
+            foreach (var item in data)
+            {
+                itemKeys[item] = keySelector(item);
+            }
+            int min = itemKeys.Values.Min();
+            int max = itemKeys.Values.Max();
+            int maxDigits = max.ToString().Length;
+            for(int digitPlace = 0; digitPlace < maxDigits; digitPlace++)
+            {
+                foreach (var item in data)
+                {
+                    int key = itemKeys[item];
+                    int digit = (key / (int)Math.Pow(10, digitPlace)) % 10;
+                    keyDigits[item] = digit;
+                }
+
             }
         }
     }

@@ -53,7 +53,7 @@ namespace DataStructures.Sorts
             return array;
         }
 
-        public static T[] Swap<T>(T[] array, int indexa, int indexb) where T : IComparable<T>
+        public static T[] Swap<T>(T[] array, int indexa, int indexb)
         {
             T temp = array[indexa];
             array[indexa] = array[indexb];

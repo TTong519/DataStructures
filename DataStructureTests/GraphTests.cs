@@ -19,14 +19,14 @@ public class GraphTests
         {
             graph.AddVertex(i);
         }
-        graph.AddEdge(0, 1);
-        graph.AddEdge(0, 2);
-        graph.AddEdge(0, 3);
-        graph.AddEdge(0, 4);
-        graph.AddEdge(1, 5);
-        graph.AddEdge(2, 6);
-        graph.AddEdge(3, 7);
-        graph.AddEdge(4, 8);
+        graph.AddEdge(graph.Search(0), graph.Search(1));
+        graph.AddEdge(graph.Search(0), graph.Search(2));
+        graph.AddEdge(graph.Search(0), graph.Search(3));
+        graph.AddEdge(graph.Search(0), graph.Search(4));
+        graph.AddEdge(graph.Search(1), graph.Search(5));
+        graph.AddEdge(graph.Search(2), graph.Search(6));
+        graph.AddEdge(graph.Search(3), graph.Search(7));
+        graph.AddEdge(graph.Search(4), graph.Search(8));
         List<Vertex<int>> visited = graph.DepthFirstTraversalIterative(0);
         List<int> expected = new List<int> { 0, 4, 8, 3, 7, 2, 6, 1, 5 };
         for(int i = 0; i < visited.Count; i++)
