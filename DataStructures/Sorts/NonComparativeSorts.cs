@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 
 namespace DataStructures.Sorts
@@ -68,9 +69,9 @@ namespace DataStructures.Sorts
                 }
             }
         }
-        public static void RadixSort<T>(List<T> data, Func<T, int> keySelector)
+        public static void RadixSort<T>(ref List<T> data, Func<T, int> keySelector)
         {
-            int[] buckets = new int[10];
+            List<T>[] buckets = new List<T>[10];
             Dictionary<T, int> itemKeys = new();
             Dictionary<T, int> keyDigits = new();
             foreach (var item in data)
@@ -85,10 +86,36 @@ namespace DataStructures.Sorts
                 foreach (var item in data)
                 {
                     int key = itemKeys[item];
-                    int digit = (key / (int)Math.Pow(10, digitPlace)) % 10;
+                    int digit = ((int)Math.Floor(key / Math.Pow(10, digitPlace)) % 10);
                     keyDigits[item] = digit;
                 }
-
+                buckets = new List<T>[10];
+                for(int i = data.Count; i > 0; i--)
+                {
+                    var item = data[i - 1];
+                    int digit = keyDigits[item];
+                    if (buckets[digit] == null)
+                    {
+                        buckets[digit] = new List<T>();
+                    }
+                    buckets[digit].Insert(0, item);
+                }
+                foreach (var bucket in buckets)
+                {
+                    if (bucket == null)
+                    {
+                        buckets[Array.IndexOf(buckets, bucket)] = new List<T>();
+                    }
+                }
+                List<T> sorted = new List<T>();
+                for(int i = 0; i < buckets.Length; i++)
+                {
+                    for(int j = 0; j < buckets[i].Count; j++)
+                    {
+                        sorted.Add(buckets[i][j]);
+                    }
+                }
+                data = sorted.ToList();
             }
         }
     }
