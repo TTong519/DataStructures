@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace DataStructures.Lists
 {
@@ -14,16 +15,31 @@ namespace DataStructures.Lists
         public Tval this[Tkey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public ICollection<Tkey> Keys => throw new NotImplementedException();
-
         public ICollection<Tval> Values => throw new NotImplementedException();
+        private LinkedList<KeyValuePair<Tkey, Tval>>[] storage = new LinkedList<KeyValuePair<Tkey, Tval>>[50];
 
-        public int Count => throw new NotImplementedException();
+        public int Count { get; private set; }
 
         public bool IsReadOnly => throw new NotImplementedException();
+        public IEqualityComparer<Tkey> Comparer { get; private set; }
+
+        public HashMap() : this(EqualityComparer<Tkey>.Default) { }
+        public HashMap(IEqualityComparer<Tkey> comparer)
+        {
+            Comparer = comparer;
+            Count = 0;
+        }
 
         public void Add(Tkey key, Tval value)
         {
-            throw new NotImplementedException();
+            //TODO: Rehash
+            if (Count + 1 > storage.Length)
+            {
+                throw new NotImplementedException();
+            }
+            int hash = Comparer.GetHashCode(key);
+            int index = Math.Abs(hash % storage.Length);
+
         }
 
         public void Add(KeyValuePair<Tkey, Tval> item)
