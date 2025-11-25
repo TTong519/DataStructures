@@ -12,7 +12,8 @@ namespace DataStructures.Lists
 {
     public class HashMap<Tkey, Tval> : IDictionary<Tkey, Tval>
     {
-        public Tval this[Tkey key] { 
+        public Tval this[Tkey key] 
+        { 
             get 
             { 
                 foreach (var pair in storage[Math.Abs(key.GetHashCode() % storage.Length)]) 
@@ -20,29 +21,54 @@ namespace DataStructures.Lists
                     if (pair.Key.Equals(key)) return pair.Value; 
                 } 
                 throw new Exception(); 
-            }  
+            } 
             set 
-            {
-                for(int i = 0; i < storage[Math.Abs(key.GetHashCode() % storage.Length)].Count; i++)
-                {
-                    var pair = storage[Math.Abs(key.GetHashCode() % storage.Length)].ElementAt(i);
-                    if (pair.Key.Equals(key))
-                    {
-                        storage[Math.Abs(key.GetHashCode() % storage.Length)].Remove(pair);
-                        storage[Math.Abs(key.GetHashCode() % storage.Length)].AddLast(new KeyValuePair<Tkey, Tval>(key, value));
-                        return;
-                    }
-                }
-                throw new Exception();
-            } }
-
-        public ICollection<Tkey> Keys { get { List<Tkey> toReturn = new(); foreach (var bucket in storage) { } } };
-        public ICollection<Tval> Values => throw new NotImplementedException();
+            { 
+                for (int i = 0; i < storage[Math.Abs(key.GetHashCode() % storage.Length)].Count; i++) 
+                { 
+                    var pair = storage[Math.Abs(key.GetHashCode() % storage.Length)].ElementAt(i); 
+                    if (pair.Key.Equals(key)) 
+                    { 
+                        storage[Math.Abs(key.GetHashCode() % storage.Length)].Remove(pair); 
+                        storage[Math.Abs(key.GetHashCode() % storage.Length)].AddLast(new KeyValuePair<Tkey, Tval>(key, value)); 
+                        return; 
+                    } 
+                } 
+                Add(key, value);
+            } 
+        }
+        public ICollection<Tkey> Keys 
+        {
+            get 
+            { 
+                List<Tkey> toReturn = new(); 
+                foreach (var bucket in storage) 
+                { 
+                    foreach (var pair in bucket) 
+                    { 
+                        toReturn.Add(pair.Key);
+                    } 
+                } return toReturn; 
+            } 
+        }
+        public ICollection<Tval> Values 
+        { 
+            get 
+            { 
+                List<Tval> toReturn = new(); 
+                foreach (var bucket in storage) 
+                { 
+                    foreach (var pair in bucket) 
+                    { 
+                        toReturn.Add(pair.Value); 
+                    } 
+                } return toReturn; 
+            } 
+        }
         private LinkedList<KeyValuePair<Tkey, Tval>>[] storage = new LinkedList<KeyValuePair<Tkey, Tval>>[50];
 
         public int Count { get; private set; }
-
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
         public IEqualityComparer<Tkey> Comparer { get; private set; }
 
         public HashMap() : this(EqualityComparer<Tkey>.Default) { }
