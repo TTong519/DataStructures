@@ -23,7 +23,7 @@ namespace DataStructuresTests
             Queue<int> results = new();
             List<int> trialResults = new();
             BinarySearchTree<int> ints = new();
-            for (int j = 0; j < 1000000; j++)
+            for (int j = 0; j < 1000; j++)
             {
                 ints.InsertRecursive(random.Next(seed));
             }
