@@ -18,24 +18,28 @@ namespace DataStructures.Trees
         }
         public int Find(T p)
         {
+            int toReturn;
             if (Data[p] == -1)
             {
                 return -1;
             }
             else
             {
-                int toReturn = Find(Data.Keys.ToList()[Data.Values.ToList().IndexOf(Data[p])]);
+                toReturn = Find(Data.Keys.ToList()[Data.Values.ToList().IndexOf(Data[p])]);
                 if (toReturn != -1)
                     toReturn = Data[p];
             }
+            return toReturn;
         }
         public void Union(T p, T q)
         {
-            throw new NotImplementedException();
+            Data[q] = Find(p);
         }
         public bool areConnected(T p, T q)
         {
-            throw new NotImplementedException();
+            if(Find(p) == Find(q))
+                return true;
+            return false;
         }
     }
 }
