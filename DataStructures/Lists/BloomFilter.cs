@@ -9,9 +9,7 @@ namespace DataStructures.Lists
     public class BloomFilter<T>
     {
         private bool[] data;
-        public Func<T, int> hashFuncOne { get; private set; } = null;
-        public Func<T, int> hashFuncTwo { get; private set; } = null;
-        public Func<T, int> hashFuncThree { get; private set; } = null;
+        public List<Func<T, int>> hashFuncs { get; private set; } = null;
         public int Count { get; private set; }
         public BloomFilter(int cap = 1000)
         {
@@ -19,30 +17,30 @@ namespace DataStructures.Lists
             Count = 0;
         }
 
-        public void LoadHashFunc(Func<T, int> hashFuncOne, Func<T, int> hashFuncTwo, Func<T, int> hashFuncThree)
+        public void LoadHashFunc(List<Func<T, int>> hashFuncs)
         {
             if (Count != 0) throw new Exception();
-            this.hashFuncOne = hashFuncOne;
-            this.hashFuncTwo = hashFuncTwo;
-            this.hashFuncThree = hashFuncThree;
+            this.hashFuncs = hashFuncs;
         }
 
         public void Insert(T item)
         {
             Count++;
-            if (hashFuncOne == null || hashFuncTwo == null || hashFuncThree == null) throw new InvalidOperationException("Hash functions must be loaded before inserting items.");
-            if (Count >= data.Length) throw new OutOfMemoryException("capacity reached");
-            int hash1 = hashFuncOne(item) % data.Length;
-            int hash2 = hashFuncTwo(item) % data.Length;
-            int hash3 = hashFuncThree(item) % data.Length;
-            data[Math.Abs(hash1)] = true;
-            data[Math.Abs(hash2)] = true;
-            data[Math.Abs(hash3)] = true;
+            if (hashFuncs == null) throw new Exception("hash functions not loaded");
+            if (Count > data.Length) throw new OutOfMemoryException("capacity reached");
+            foreach (var func in hashFuncs)
+            {
+                data[func(item) % data.Length] = true;
+            }
         }
 
         public bool ProbablyContains(T item)
         {
-            return data[hashFuncOne(item) % data.Length] && data[hashFuncTwo(item) % data.Length] && data[hashFuncThree(item) % data.Length];
+            foreach (var func in hashFuncs)
+            {
+                if (!data[func(item) % data.Length]) return false;
+            }
+            return true;
         }
     }
 }
