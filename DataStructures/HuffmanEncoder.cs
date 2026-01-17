@@ -25,7 +25,7 @@ namespace DataStructures
             {
                 pq.Enqueue(kvp.Key, kvp.Value);
             }
-            byte code = 0;
+            byte code = 1;
             while (pq.Count >= 1)
             {
                 var item = pq.Dequeue();
@@ -39,13 +39,13 @@ namespace DataStructures
             List<byte> encodedBytes = new();
             for (int i = 0; i < text.Length; i++)
             {
-                encodedString += codes[text[i]].ToString("B" + (codes[text[i]] / 2).ToString());
+                encodedString += codes[text[i]].ToString("B" + ((int)Math.Log2(codes[text[i]])).ToString());
             }
             for (int i = 0; i < encodedString.Length; i += 8)
             {
-                encodedBytes.Add(Convert.ToByte(encodedString.Substring(i, 8), 2));
+                encodedBytes.Add(Convert.ToByte(encodedString.Substring(i, int.Min(8, encodedString.Length - i - 1)), 2));
             }
-
+            
             return (encodedBytes.ToArray(), codes);
         }
         public string Decode(byte[] encodedBytes, Dictionary<char, byte> codes)
@@ -53,7 +53,7 @@ namespace DataStructures
             Dictionary<string, char> reverseCodes = new();
             foreach(var kvp in codes)
             {
-                reverseCodes.Add(kvp.Value.ToString("B" + (kvp.Value / 2).ToString()), kvp.Key);
+                reverseCodes.Add(kvp.Value.ToString("B" + ((int)Math.Log2(kvp.Value)).ToString()), kvp.Key);
             }
             StringBuilder encodedString = new();
             foreach(byte b in encodedBytes)
