@@ -6,13 +6,39 @@ using System.Threading.Tasks;
 
 namespace DataStructures
 {
+    class HuffmanNode
+    {
+        public char Character { get; set; }
+        public int Frequency { get; set; }
+        public HuffmanNode Left { get; set; }
+        public HuffmanNode Right { get; set; }
+        public HuffmanNode(char character, int frequency)
+        {
+            Left = null;
+            Right = null;
+            Character = character;
+            Frequency = frequency;
+        }
+    }
+    Dictionary<char, byte> generateCodes(HuffmanNode node, byte startCode)
+    {
+        Dictionary<char, byte> codes = new();
+        if (node.Character != '\0')
+        {
+            codes.Add(node.Character, startCode);
+            return codes;
+        }
+        if (node.Left != null)
+        {
+            
+        }
+    }
     public class HuffmanEncoder
     {
-        public (byte[] result, Dictionary<char, byte> codes) Encode(string text)
+        public (byte[] result, HuffmanNode root) Encode(string text)
         {
-            PriorityQueue<char, int> pq = new();
+            PriorityQueue<HuffmanNode, int> pq = new();
             Dictionary<char, int> freq = new();
-            Dictionary<char, byte> codes = new();
             foreach (char c in text)
             {
                 if(!freq.ContainsKey(c))
@@ -23,30 +49,22 @@ namespace DataStructures
             }
             foreach (var kvp in freq)
             {
-                pq.Enqueue(kvp.Key, kvp.Value);
+                pq.Enqueue(new(kvp.Key, kvp.Value), kvp.Value);
             }
-            byte code = 1;
-            while (pq.Count >= 1)
+            while(pq.Count > 1)
             {
-                var item = pq.Dequeue();
-                if(!codes.ContainsKey(item))
+                HuffmanNode left = pq.Dequeue();
+                HuffmanNode right = pq.Dequeue();
+                HuffmanNode parent = new('\0', left.Frequency + right.Frequency)
                 {
-                    codes.Add(item, code);
-                    code++;
-                }
+                    Left = left,
+                    Right = right
+                };
+                pq.Enqueue(parent, parent.Frequency);
             }
-            string encodedString = "";
-            List<byte> encodedBytes = new();
-            for (int i = 0; i < text.Length; i++)
-            {
-                encodedString += codes[text[i]].ToString("B" + ((int)Math.Log2(codes[text[i]])).ToString());
-            }
-            for (int i = 0; i < encodedString.Length; i += 8)
-            {
-                encodedBytes.Add(Convert.ToByte(encodedString.Substring(i, int.Min(8, encodedString.Length - i - 1)), 2));
-            }
+            HuffmanNode root = pq.Dequeue();
+            Dictionary<char, byte> codes = new();
             
-            return (encodedBytes.ToArray(), codes);
         }
         public string Decode(byte[] encodedBytes, Dictionary<char, byte> codes)
         {
