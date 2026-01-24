@@ -17,8 +17,9 @@ public class HuffmanEncoderTest
         for (int i = 0; i < random.Next(1000); i++)
         {
             string input = new string(Enumerable.Range(0, 100).Select(_ => (char)random.Next(32, 127)).ToArray());
+            input = "streets are stone stars are not";
             var encoder = new HuffmanEncoder();
-            (byte[] encoded, Dictionary<char, byte> codes) = encoder.Encode(input);
+            (byte[] encoded, var codes) = encoder.Encode(input);
             string decoded = encoder.Decode(encoded, codes);
             Assert.AreEqual(input, decoded);
         }

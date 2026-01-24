@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataStructures
 {
-    class HuffmanNode
+    public class HuffmanNode
     {
         public char Character { get; set; }
         public int Frequency { get; set; }
@@ -20,21 +20,43 @@ namespace DataStructures
             Frequency = frequency;
         }
     }
-    Dictionary<char, byte> generateCodes(HuffmanNode node, byte startCode)
-    {
-        Dictionary<char, byte> codes = new();
-        if (node.Character != '\0')
-        {
-            codes.Add(node.Character, startCode);
-            return codes;
-        }
-        if (node.Left != null)
-        {
-            
-        }
-    }
+    
     public class HuffmanEncoder
     {
+// TODO:use tuples to indicate padding length
+        Dictionary<char, byte> GenerateCodes(HuffmanNode root)
+        {
+            return helper(root, 0);
+
+            Dictionary<char, byte> helper(HuffmanNode node, byte startCode)
+            {
+                Dictionary<char, byte> codes = new();
+                if (node.Character != '\0')
+                {
+                    codes.Add(node.Character, startCode);
+                    return codes;
+                }
+                if (node.Left != null)
+                {
+                    var temp = helper(node.Left, (byte)(startCode << 1));
+                    foreach (var item in temp)
+                    {
+                        codes.Add(item.Key, item.Value);
+                    }
+                }
+                if (node.Right != null)
+                {
+                    var temp = helper(node.Right, (byte)((startCode << 1) | 1));
+                    foreach (var item in temp)
+                    {
+                        codes.Add(item.Key, item.Value);
+                    }
+                }
+                return codes;
+            }
+        }
+
+        
         public (byte[] result, HuffmanNode root) Encode(string text)
         {
             PriorityQueue<HuffmanNode, int> pq = new();
@@ -43,7 +65,7 @@ namespace DataStructures
             {
                 if(!freq.ContainsKey(c))
                 {
-                    freq.Add(c, 0);
+                    freq.Add(c, 1);
                 }
                 freq[c]++;
             }
@@ -64,29 +86,52 @@ namespace DataStructures
             }
             HuffmanNode root = pq.Dequeue();
             Dictionary<char, byte> codes = new();
-            
-        }
-        public string Decode(byte[] encodedBytes, Dictionary<char, byte> codes)
-        {
-            Dictionary<string, char> reverseCodes = new();
-            foreach(var kvp in codes)
+            codes = GenerateCodes(root);
+            string encodedString = "";
+            foreach(char c in text)
             {
-                reverseCodes.Add(kvp.Value.ToString("B" + ((int)Math.Log2(kvp.Value)).ToString()), kvp.Key);
+                encodedString += codes[c].ToString("B" + int.Max(1, (int)Math.Log2(codes[c])).ToString());
             }
+            List<byte> encodedBytes = new();
+            for(int i = 0; i < encodedString.Length; i += 8)
+            {
+                string byteString = encodedString.Substring(i, Math.Min(8, encodedString.Length - i));
+                while(byteString.Length < 8)
+                {
+                    byteString += "0";
+                }
+                encodedBytes.Add(Convert.ToByte(byteString, 2));
+            }
+            return (encodedBytes.ToArray(), root);
+        }
+        public string Decode(byte[] encodedBytes, HuffmanNode root)
+        {
             StringBuilder encodedString = new();
             foreach(byte b in encodedBytes)
             {
                 encodedString.Append(b.ToString("B8"));
             }
-            string word = "";
             StringBuilder decodedString = new();
+            HuffmanNode currentNode = root;
             for (int i = 0; i < encodedString.Length; i++)
             {
-                word += encodedString[i];
-                if(reverseCodes.ContainsKey(word))
+                if (encodedString[i] == '0')
                 {
-                    decodedString.Append(reverseCodes[word]);
-                    word = "";
+                    if(currentNode.Character =='\0') currentNode = currentNode.Left;
+                    else
+                    {
+                        decodedString.Append(currentNode.Character);
+                        currentNode = root.Left;
+                    }
+                }
+                else
+                {
+                    if (currentNode.Character == '\0') currentNode = currentNode.Right;
+                    else
+                    {
+                        decodedString.Append(currentNode.Character);
+                        currentNode = root.Right;
+                    }
                 }
             }
             return decodedString.ToString();
