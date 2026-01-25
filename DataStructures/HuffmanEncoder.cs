@@ -20,25 +20,24 @@ namespace DataStructures
             Frequency = frequency;
         }
     }
-    
+
     public class HuffmanEncoder
     {
-// TODO:use tuples to indicate padding length
-        Dictionary<char, byte> GenerateCodes(HuffmanNode root)
+        Dictionary<char, (byte code, int length)> GenerateCodes(HuffmanNode root)
         {
-            return helper(root, 0);
+            return helper(root, 0, 0);
 
-            Dictionary<char, byte> helper(HuffmanNode node, byte startCode)
+            Dictionary<char, (byte code, int length)> helper(HuffmanNode node, byte startCode, int startCodeLength)
             {
-                Dictionary<char, byte> codes = new();
+                Dictionary<char, (byte code, int length)> codes = new();
                 if (node.Character != '\0')
                 {
-                    codes.Add(node.Character, startCode);
+                    codes.Add(node.Character, (startCode, startCodeLength));
                     return codes;
                 }
                 if (node.Left != null)
                 {
-                    var temp = helper(node.Left, (byte)(startCode << 1));
+                    var temp = helper(node.Left, (byte)(startCode << 1), startCodeLength + 1);
                     foreach (var item in temp)
                     {
                         codes.Add(item.Key, item.Value);
@@ -46,7 +45,7 @@ namespace DataStructures
                 }
                 if (node.Right != null)
                 {
-                    var temp = helper(node.Right, (byte)((startCode << 1) | 1));
+                    var temp = helper(node.Right, (byte)((startCode << 1) | 1), startCodeLength + 1);
                     foreach (var item in temp)
                     {
                         codes.Add(item.Key, item.Value);
@@ -56,14 +55,14 @@ namespace DataStructures
             }
         }
 
-        
-        public (byte[] result, HuffmanNode root) Encode(string text)
+
+        public (byte[] result, HuffmanNode root, uint length) Encode(string text)
         {
             PriorityQueue<HuffmanNode, int> pq = new();
             Dictionary<char, int> freq = new();
             foreach (char c in text)
             {
-                if(!freq.ContainsKey(c))
+                if (!freq.ContainsKey(c))
                 {
                     freq.Add(c, 1);
                 }
@@ -73,7 +72,7 @@ namespace DataStructures
             {
                 pq.Enqueue(new(kvp.Key, kvp.Value), kvp.Value);
             }
-            while(pq.Count > 1)
+            while (pq.Count > 1)
             {
                 HuffmanNode left = pq.Dequeue();
                 HuffmanNode right = pq.Dequeue();
@@ -85,39 +84,47 @@ namespace DataStructures
                 pq.Enqueue(parent, parent.Frequency);
             }
             HuffmanNode root = pq.Dequeue();
-            Dictionary<char, byte> codes = new();
+            Dictionary<char, (byte code, int length)> codes = new();
             codes = GenerateCodes(root);
-            string encodedString = "";
-            foreach(char c in text)
+
+            StringBuilder encodedBuilder = new();
+
+            int poop = 0;
+            foreach (char c in text)
             {
-                encodedString += codes[c].ToString("B" + int.Max(1, (int)Math.Log2(codes[c])).ToString());
+                poop++;
+                encodedBuilder.Append(codes[c].code.ToString("B" + codes[c].length.ToString()));
             }
+
+            string encodedString = encodedBuilder.ToString();
+
             List<byte> encodedBytes = new();
-            for(int i = 0; i < encodedString.Length; i += 8)
+            for (int i = 0; i < encodedString.Length; i += 8)
             {
                 string byteString = encodedString.Substring(i, Math.Min(8, encodedString.Length - i));
-                while(byteString.Length < 8)
+                while (byteString.Length < 8)
                 {
                     byteString += "0";
                 }
                 encodedBytes.Add(Convert.ToByte(byteString, 2));
             }
-            return (encodedBytes.ToArray(), root);
+            return (encodedBytes.ToArray(), root, (uint)encodedString.Length);
         }
-        public string Decode(byte[] encodedBytes, HuffmanNode root)
+        public string Decode(byte[] encodedBytes, HuffmanNode root, uint length)
         {
             StringBuilder encodedString = new();
-            foreach(byte b in encodedBytes)
+            foreach (byte b in encodedBytes)
             {
                 encodedString.Append(b.ToString("B8"));
             }
+            encodedString.Append("0");
             StringBuilder decodedString = new();
             HuffmanNode currentNode = root;
-            for (int i = 0; i < encodedString.Length; i++)
+            for (int i = 0; i < (int)length + 1; i++)
             {
                 if (encodedString[i] == '0')
                 {
-                    if(currentNode.Character =='\0') currentNode = currentNode.Left;
+                    if (currentNode.Character == '\0') currentNode = currentNode.Left;
                     else
                     {
                         decodedString.Append(currentNode.Character);

@@ -1,4 +1,5 @@
 using DataStructures;
+using System.Text;
 namespace DataStructuresTests;
 
 [TestClass]
@@ -14,14 +15,30 @@ public class HuffmanEncoderTest
     public void Test(int seed)
     {
         Random random = new Random(seed);
-        for (int i = 0; i < random.Next(1000); i++)
+        for (int i = 0; i < 1000; i++)
         {
             string input = new string(Enumerable.Range(0, 100).Select(_ => (char)random.Next(32, 127)).ToArray());
-            input = "streets are stone stars are not";
             var encoder = new HuffmanEncoder();
-            (byte[] encoded, var codes) = encoder.Encode(input);
-            string decoded = encoder.Decode(encoded, codes);
+            (byte[] encoded, var codes, uint len) = encoder.Encode(input);
+            string decoded = encoder.Decode(encoded, codes, len);
             Assert.AreEqual(input, decoded);
         }
+    }
+    [TestMethod]
+    public void ComptessionTest()
+    {
+        string inputfilepath = "..\\..\\..\\Harry Potter and the Sorcerer's Sto.txt";
+        var encoder = new HuffmanEncoder();
+        string input = File.ReadAllText(inputfilepath);
+        (byte[] encoded, var codes, uint len) = encoder.Encode(input);
+        string encodedString = "";
+        StringBuilder encodedBuilder = new();
+        foreach (var b in encoded)
+        {
+            encodedBuilder.Append(b.ToString("B8"));
+        }
+        encodedString = encodedBuilder.ToString();
+        string decoded = encoder.Decode(encoded, codes, len);
+        Assert.IsTrue(encodedString.Length < input.Length*8);
     }
 }
