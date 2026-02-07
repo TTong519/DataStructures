@@ -8,5 +8,6 @@ namespace DataStructures.Trees
 {
     public class BurstTrie
     {
+        public int MaxContainerSize;
     }
 }

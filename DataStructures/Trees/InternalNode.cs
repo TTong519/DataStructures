@@ -19,7 +19,26 @@ namespace DataStructures.Trees
 
         public override BurstNode Insert(string value, int index)
         {
-            throw new NotImplementedException();
+            char c = value[0];
+            int childIndex = c - 'a';
+            if (childIndex < 0 || childIndex > 25)
+            {
+                throw new ArgumentException("Value must be a word only containing lowercase letters.");
+            }
+            if (children[childIndex] == null)
+            {
+                children[childIndex] = new ContainerNode(ParentTrie);
+                children[childIndex].Insert(value, index + 1);
+                count++;
+                return this;
+            }
+            else
+            {
+                BurstNode newChild = children[childIndex].Insert(value, index + 1);
+                children[childIndex] = newChild;
+                count++;
+                return this;
+            }
         }
 
         public override BurstNode Remove(string value, int index, out bool success)

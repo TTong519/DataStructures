@@ -15,27 +15,32 @@ namespace DataStructures.Trees
         {
             Data = new BinarySearchTree<string>();
         }
-
         public override BurstNode Insert(string value, int index)
         {
             Data.Insert(value);
+            if(Data.Count > ParentTrie.MaxContainerSize)
+            {
+                var newNode = new InternalNode(ParentTrie);
+                foreach (var item in Data.InOrderTraversal())
+                {
+                    newNode.Insert(item, index);
+                }
+                return newNode;
+            }
             return this;
         }
-
         public override BurstNode Remove(string value, int index, out bool success)
         {
             success = Data.Remove(value);
             return this;
         }
-
         public override BurstNode Search(string prefix, int index)
         {
-            throw new NotImplementedException();
+            return this;
         }
-
         internal override void GetAll(List<string> output)
         {
-            throw new NotImplementedException();
+            output = Data.InOrderTraversal().ToList();
         }
     }
 }
