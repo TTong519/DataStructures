@@ -36,7 +36,15 @@ namespace DataStructures.Trees
         }
         public override BurstNode Search(string prefix, int index)
         {
-            return this;
+            ContainerNode result = new ContainerNode(ParentTrie);
+            foreach (var item in Data.InOrderTraversal())
+            {
+                if (item.StartsWith(prefix))
+                {
+                    result.Data.Insert(item);
+                }
+            }
+            return result;
         }
         internal override void GetAll(List<string> output)
         {
