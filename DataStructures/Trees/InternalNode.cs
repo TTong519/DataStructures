@@ -19,7 +19,7 @@ namespace DataStructures.Trees
 
         public override BurstNode Insert(string value, int index)
         {
-            if (index == value.Length)
+            if (index >= value.Length)
             {
                 char ca = value[value.Length - 1];
                 int childindex = ca - 'a';
@@ -115,6 +115,10 @@ namespace DataStructures.Trees
 
         public override BurstNode Search(string prefix, int index)
         {
+            if(index >= prefix.Length)
+            {
+                return children[0];
+            }
             char c = prefix[index];
             int childIndex = c - 'a';
             if (childIndex < 0 || childIndex > 25)

@@ -8,7 +8,7 @@ namespace DataStructures.Trees
 {
     public class BurstTrie
     {
-        public int MaxContainerSize;
+        public float MaxContainerSize;
         private BurstNode root;
         public int Count => root.Count;
         public BurstTrie(int maxContainerSize = 10)

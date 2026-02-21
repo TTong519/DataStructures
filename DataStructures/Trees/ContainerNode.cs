@@ -25,6 +25,7 @@ namespace DataStructures.Trees
                 {
                     newNode.Insert(item, index);
                 }
+                ParentTrie.MaxContainerSize += 0.05f;
                 return newNode;
             }
             return this;
@@ -48,7 +49,7 @@ namespace DataStructures.Trees
         }
         internal override void GetAll(List<string> output)
         {
-            output = Data.InOrderTraversal().ToList();
+            output.AddRange(Data.InOrderTraversal());
         }
     }
 }
