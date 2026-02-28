@@ -20,19 +20,19 @@ namespace DataStructures.Trees
             Data.Insert(value);
             if(Data.Count > ParentTrie.MaxContainerSize)
             {
+                ParentTrie.MaxContainerSize += 1;
                 var newNode = new InternalNode(ParentTrie);
                 foreach (var item in Data.InOrderTraversal())
                 {
                     newNode.Insert(item, index);
                 }
-                ParentTrie.MaxContainerSize += 0.05f;
                 return newNode;
             }
             return this;
         }
         public override BurstNode Remove(string value, int index, out bool success)
         {
-            success = Data.Remove(value);
+            success = Data.RemoveRecursive(Data.Root, value);
             return this;
         }
         public override BurstNode Search(string prefix, int index)

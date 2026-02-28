@@ -272,167 +272,65 @@ namespace DataStructures.Trees
         }
         private BinarySearchTreeNode<T> Remove(BinarySearchTreeNode<T> Node, T val)
         {
-           if(Node.Values.Count > 1)
-           {
-                Node.Values.Remove(val);
+            if (Node == null) return null;
+
+            int comp = val.CompareTo(Node.Values[0]);
+            if (comp < 0)
+            {
+                Node.Left = Remove(Node.Left, val);
                 return Node;
-           }
-           if(Node.Left == null) return Node.Right;
-           else if (Node.Right == null) return Node.Left;
-           else
-           {
-                BinarySearchTreeNode<T> biggestsmall = Node.Left;
-                BinarySearchTreeNode<T> parent = biggestsmall;
-                if (biggestsmall.Right != null) biggestsmall = biggestsmall.Right;
-                while (biggestsmall.Right != null)
+            }
+            else if (comp > 0)
+            {
+                Node.Right = Remove(Node.Right, val);
+                return Node;
+            }
+            else
+            {
+                // Found the node that contains the value
+                if (Node.Values.Count > 1)
                 {
-                    parent = biggestsmall;
-                    biggestsmall = biggestsmall.Right;
+                    // If there are duplicates stored in this node, remove one occurrence
+                    bool removed = Node.Values.Remove(val);
+                    if (removed) Count--;
+                    return Node;
                 }
-                if(parent != biggestsmall)parent.Right = biggestsmall.Left;
-                return biggestsmall;
-           }
+
+                // No duplicates: remove the node from the tree
+                Count--;
+
+                // If one child is null, return the other
+                if (Node.Left == null) return Node.Right;
+                if (Node.Right == null) return Node.Left;
+
+                // Both children exist: find inorder predecessor (max in left subtree)
+                BinarySearchTreeNode<T> predecessor = Node.Left;
+                while (predecessor.Right != null)
+                {
+                    predecessor = predecessor.Right;
+                }
+
+                // Copy predecessor's values into current node
+                Node.Values = new System.Collections.Generic.List<T>(predecessor.Values);
+
+                // Remove the predecessor node (remove by its representative value)
+                Node.Left = Remove(Node.Left, predecessor.Values[0]);
+
+                return Node;
+            }
         }
         public bool RemoveRecursive(BinarySearchTreeNode<T> current, T val)
         {
-            if(current == null) return false;
-            if (current.Values[0].CompareTo(val) > 0)
-            {
-                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
-                {
-                    BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
-                    if (toReplace != null)
-                    {
-                        if (toReplace != current.Right.Left)
-                        {
-                            toReplace.Left = current.Right.Left;
-                        }
-                        toReplace.Right = current.Left.Right;
-                    }
-                    current.Left = toReplace;
-                    return true;
-                }
-                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
-                {
-                    BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
-                    if (toReplace != null)
-                    {
-                        if (toReplace != current.Right.Left)
-                        {
-                            toReplace.Left = current.Right.Left;
-                        }
-                        toReplace.Right = current.Right.Right;
-                    }
-                    current.Right = toReplace;
-                    return true;
-                }
-                RemoveRecursive(current.Left, val);
-            }
-            else if (current.Values[0].CompareTo(val) < 0)
-            {
-                if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
-                {
-                    BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
-                    if (toReplace != null)
-                    {
-                        if (toReplace != current.Right.Left)
-                        {
-                            toReplace.Left = current.Right.Left;
-                        }
-                        toReplace.Right = current.Left.Right;
-                    }
-                    current.Left = toReplace;
-                    return true;
-                }
-                else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
-                {
-                    BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
-                    if (toReplace != null)
-                    {
-                        if (toReplace != current.Right.Left)
-                        {
-                            toReplace.Left = current.Right.Left;
-                        }
-                        toReplace.Right = current.Right.Right;
-                    }
-                    current.Right = toReplace;
-                    return true;
-                }
-                RemoveRecursive(current.Right, val);
-            }
-            return false;
+            int before = Count;
+            // Always perform removal starting from the root to ensure tree integrity
+            Root = Remove(Root, val);
+            return Count < before;
         }
         public bool Remove(T val)
         {
-            BinarySearchTreeNode<T> current = Root;
-            while (current != null)
-            {
-                if (current.Values[0].CompareTo(val) > 0)
-                {
-                    if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
-                    {
-                        BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
-                        if (toReplace != null)
-                        {
-                            if (toReplace != current.Right.Left)
-                            {
-                                toReplace.Left = current.Right.Left;
-                            }
-                            toReplace.Right = current.Left.Right;
-                        }
-                        current.Left = toReplace;
-                        return true;
-                    }
-                    else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
-                    {
-                        BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
-                        if (toReplace != null)
-                        {
-                            if (toReplace != current.Right.Left)
-                            {
-                                toReplace.Left = current.Right.Left;
-                            }
-                            toReplace.Right = current.Right.Right;
-                        }
-                        current.Right = toReplace;
-                        return true;
-                    }
-                    current = current.Left;
-                }
-                else if (current.Values[0].CompareTo(val) < 0)
-                {
-                    if (current.Left != null && current.Left.Values[0].CompareTo(val) == 0)
-                    {
-                        BinarySearchTreeNode<T> toReplace = Remove(current.Left, val);
-                        if (toReplace != null)
-                        {
-                            if (toReplace != current.Right.Left)
-                            {
-                                toReplace.Left = current.Right.Left;
-                            }
-                            toReplace.Right = current.Left.Right;
-                        }
-                        current.Left = toReplace;
-                        return true;
-                    }
-                    else if (current.Right != null && current.Right.Values[0].CompareTo(val) == 0)
-                    {
-                        BinarySearchTreeNode<T> toReplace = Remove(current.Right, val);
-                        if (toReplace != null)
-                        {
-                            if (toReplace != current.Right.Left)
-                            {
-                                toReplace.Left = current.Right.Left;
-                            }
-                            toReplace.Right = current.Right.Right;
-                        }
-                        current.Right = toReplace;
-                        return true;
-                    }
-                    current = current.Right;
-                }
-            }
-            return false;
+            int before = Count;
+            Root = Remove(Root, val);
+            return Count < before;
         }
     }
 }
