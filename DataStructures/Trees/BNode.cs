@@ -20,6 +20,19 @@ namespace DataStructures.Trees
             Children = new BNode<T>[degree];
         }
         public BNode<T> Split()
+        {
+            BNode<T> toReturn = new(2);
+            toReturn.Children[0] = new(2);
+            toReturn.Children[1] = new(2);
+            toReturn.Values[0] = Values[1];
+            toReturn.Children[0].Values[0] = Values[0];
+            toReturn.Children[1].Values[0] = Values[2];
+            toReturn.Children[0].Children[0] = Children[0];
+            toReturn.Children[0].Children[1] = Children[1];
+            toReturn.Children[1].Children[0] = Children[2];
+            toReturn.Children[1].Children[1] = Children[3];
+            return toReturn;
+        }
         public bool Expand(T value)
         {
             if(Degree == 4)

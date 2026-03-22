@@ -20,7 +20,7 @@ namespace DataStructures.Trees
                 Root = new BNode<int>(value);
                 return;
             }
-            Insert(Root, value);
+            //Insert(Root, value);
         }
     }
 }
