@@ -39,29 +39,53 @@ namespace DataStructures.Trees
             {
                 return false;
             }
-            T[] newValues = new T[Degree];
-            Values.CopyTo(newValues, 0);
-            newValues[Degree - 1] = value;
+            List<T> newValues = Values.ToList();
+            newValues.Add(value);
+            newValues.Sort();
+            Values = newValues.ToArray();
             Children = new BNode<T>[Degree + 1];
             Degree++;
             return true;
         }
-        public void Insert(T value)
+        public bool Expand(BNode<T> node)
         {
-            if (IsLeaf)
+            List<T> newValues = Values.ToList();
+            newValues.Add(node.Values[0]);
+            newValues.Sort();
+
+        }
+        public bool Insert(T value)
+        {
+            if(Degree == 4)
             {
-                Expand(value);
-                return;
+                return false;
+            }
+            if (IsLeaf)
+            { 
+                return Expand(value);
             }
             for (int i = 0; i < Degree - 1; i++)
             {
-                if (value.CompareTo(Values[i]) < 0)
+                if (Values[i].CompareTo(value) < 0)
                 {
-                    Children[i].Insert(value);
-                    return;
+                    if (!Children[i].Insert(value))
+                    {
+                        BNode<T> toReplace = Children[i].Split();
+                        
+                    }
+                    return true;
+                }
+                else if(Values[i].CompareTo(value) == 0)
+                {
+                    throw new Exception("duplicate");
                 }
             }
-            Children[Degree - 1].Insert(value);
+            if (!Children[Degree - 1].Insert(value))
+            {
+                Children[Degree - 1] = Children[Degree - 1].Split();
+                Children[Degree - 1].Insert(value);
+            }
+            return true;
         }
     }
 }
