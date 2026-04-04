@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DaraStructures.Trees
+namespace DataStructures.Trees
 {
     public class AVLTreeNode<T> where T : IComparable<T>
     {

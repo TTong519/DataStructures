@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataStructures.Trees
 {
-    public class BNode<T> where T : IComparable<T>
+    public class BNode<T> : IComparable<BNode<T>> where T : IComparable<T>
     {
         public T[] Values;
         public BNode<T>[] Children;
@@ -18,6 +18,13 @@ namespace DataStructures.Trees
             Degree = degree;
             Values = new T[degree - 1];
             Children = new BNode<T>[degree];
+        }
+        public BNode(T value)
+        {
+            Degree = 2;
+            Values = new T[1];
+            Children = new BNode<T>[2];
+            Values[0] = value;
         }
         public BNode<T> Split()
         {
@@ -52,7 +59,17 @@ namespace DataStructures.Trees
             List<T> newValues = Values.ToList();
             newValues.Add(node.Values[0]);
             newValues.Sort();
-
+            List<BNode<T>> newChildren = Children.ToList();
+            newChildren.Remove(node);
+            foreach(BNode<T> child in node.Children)
+            {
+                newChildren.Add(child);
+            }
+            newChildren.Sort();
+            Degree++;
+            Values = newValues.ToArray();
+            Children = newChildren.ToArray();
+            return true;
         }
         public bool Insert(T value)
         {
@@ -66,12 +83,13 @@ namespace DataStructures.Trees
             }
             for (int i = 0; i < Degree - 1; i++)
             {
-                if (Values[i].CompareTo(value) < 0)
+                if (Values[i].CompareTo(value) > 0)
                 {
                     if (!Children[i].Insert(value))
                     {
                         BNode<T> toReplace = Children[i].Split();
-                        
+                        Expand(toReplace);
+                        return false;
                     }
                     return true;
                 }
@@ -82,10 +100,46 @@ namespace DataStructures.Trees
             }
             if (!Children[Degree - 1].Insert(value))
             {
-                Children[Degree - 1] = Children[Degree - 1].Split();
-                Children[Degree - 1].Insert(value);
+                BNode<T> toReplace = Children[Degree - 1].Split();
+                Expand(toReplace);
+                return false;
             }
             return true;
+        }
+        public bool Contains(T value)
+        {
+            if(IsLeaf)
+            {
+                return Values.Contains(value);
+            }
+            for (int i = 0; i < Degree - 1; i++)
+            {
+                if (Values[i].CompareTo(value) > 0)
+                {
+                    return Children[i].Contains(value);
+                }
+                else if (Values[i].CompareTo(value) == 0)
+                {
+                    return true;
+                }
+            }
+            return Children[Degree - 1].Contains(value);
+        }
+
+        public int CompareTo(BNode<T> other)
+        {
+            if (other.Values[other.Degree - 2].CompareTo(Values[0]) < 0)
+            {
+                return -1;
+            }
+            else if (other.Values[0].CompareTo(Values[Degree - 2]) > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

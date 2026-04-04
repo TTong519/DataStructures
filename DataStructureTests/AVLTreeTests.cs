@@ -1,8 +1,6 @@
-using DaraStructures.Trees;
-using DataStructures.Trees;
-
 namespace DataStructuresTests;
 
+using DataStructures.Trees;
 [TestClass]
 public class AVLTreeTests
 {
