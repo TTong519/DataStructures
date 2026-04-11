@@ -22,10 +22,7 @@ namespace DataStructures.Trees
             }
             if (!Root.Insert(value))
             {
-                if (Root.Degree == 4)
-                {
-                    Root = Root.Split();
-                }
+                Root = Root.Split();
                 Root.Insert(value);
             }
         }

@@ -5,34 +5,214 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataStructures.Trees
+namespace 
+    DataStructures
+    .
+    Trees
 {
-    public class BNode<T> : IComparable<BNode<T>> where T : IComparable<T>
+    public
+        class
+        BNode
+        <
+        T
+        >
+        :
+        IComparable
+        <
+            BNode
+            <
+                T
+                >
+            >
+        where
+        T
+        :
+        IComparable
+        <
+            T
+            >
     {
-        public T[] Values;
-        public BNode<T>[] Children;
-        public int Degree { get; private set; }
-        public bool IsLeaf => Children.All(c => c == null);
-        public BNode(int degree)
-        {
-            Degree = degree;
-            Values = new T[degree - 1];
-            Children = new BNode<T>[degree];
+        public
+            T
+            [
+            ]
+            Values
+            ;
+        public
+            BNode
+            <
+                T
+                >
+            [
+            ] 
+            Children
+            ;
+        public 
+            int
+            Degree
+        { 
+            get
+                ; 
+            private 
+                set
+                ; 
         }
-        public BNode(T value)
+        public 
+            bool
+            IsLeaf
+            =>
+            Children
+            .
+            All
+            (
+                c 
+                => 
+                c 
+                ==
+                null
+                )
+            ;
+        public
+            BNode
+            (
+            int
+            degree
+            )
         {
-            Degree = 2;
-            Values = new T[1];
-            Children = new BNode<T>[2];
-            Values[0] = value;
+            Degree
+                =
+                degree
+                ;
+            Values
+                = 
+                new 
+                T
+                [
+                degree
+                - 
+                1
+                ]
+                ;
+            Children
+                = 
+                new
+                BNode<T>
+                [
+                degree
+                ]
+                ;
         }
-        public BNode<T> Split()
+        public
+            BNode
+            (
+            T
+            value
+            )
         {
-            BNode<T> toReturn = new(2);
-            toReturn.Children[0] = new(2);
-            toReturn.Children[1] = new(2);
-            toReturn.Values[0] = Values[1];
-            toReturn.Children[0].Values[0] = Values[0];
+            Degree
+                =
+                2
+                ;
+            Values
+                = 
+                new 
+                T
+                [
+                1
+                ]
+                ;
+            Children 
+                =
+                new
+                BNode
+                <
+                    T
+                    >
+                    [
+                    2
+                    ]
+                    ;
+            Values
+                [
+                0
+                ] 
+                =
+                value
+                ;
+        }
+        public 
+            BNode
+            <
+                T
+                >
+            Split
+            (
+            )
+        {
+            BNode
+                <
+                T
+                > 
+                toReturn
+                = 
+                new
+                (
+                    2
+                    )
+                ;
+            toReturn
+                .
+                Children
+                [
+                0
+                ]
+                =
+                new
+                (
+                    2
+                    )
+                ;
+            toReturn
+                .
+                Children
+                [
+                1
+                ] 
+                = 
+                new
+                (
+                    2
+                    )
+                ;
+            toReturn
+                .
+                Values
+[
+0
+]
+=
+Values
+[
+1
+]
+;
+            toReturn
+.
+Children
+[
+0
+]
+.
+Values
+[
+0
+]
+ =
+ Values
+[
+0
+]
+;
             toReturn.Children[1].Values[0] = Values[2];
             toReturn.Children[0].Children[0] = Children[0];
             toReturn.Children[0].Children[1] = Children[1];
@@ -54,13 +234,13 @@ namespace DataStructures.Trees
             Degree++;
             return true;
         }
-        public bool Expand(BNode<T> node)
+        public bool Expand(BNode<T> node, BNode<T> nodeToRemove)
         {
             List<T> newValues = Values.ToList();
             newValues.Add(node.Values[0]);
             newValues.Sort();
             List<BNode<T>> newChildren = Children.ToList();
-            newChildren.Remove(node);
+            newChildren.Remove(nodeToRemove);
             foreach(BNode<T> child in node.Children)
             {
                 newChildren.Add(child);
@@ -88,8 +268,8 @@ namespace DataStructures.Trees
                     if (!Children[i].Insert(value))
                     {
                         BNode<T> toReplace = Children[i].Split();
-                        Expand(toReplace);
-                        return false;
+                        Expand(toReplace, Children[i]);
+                        return Insert(value);
                     }
                     return true;
                 }
@@ -101,8 +281,8 @@ namespace DataStructures.Trees
             if (!Children[Degree - 1].Insert(value))
             {
                 BNode<T> toReplace = Children[Degree - 1].Split();
-                Expand(toReplace);
-                return false;
+                Expand(toReplace, Children[Degree - 1]);
+                return Insert(value);
             }
             return true;
         }
@@ -130,11 +310,11 @@ namespace DataStructures.Trees
         {
             if (other.Values[other.Degree - 2].CompareTo(Values[0]) < 0)
             {
-                return -1;
+                return 1;
             }
             else if (other.Values[0].CompareTo(Values[Degree - 2]) > 0)
             {
-                return 1;
+                return -1;
             }
             else
             {
