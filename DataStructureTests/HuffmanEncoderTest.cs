@@ -25,9 +25,9 @@ public class HuffmanEncoderTest
         }
     }
     [TestMethod]
-    public void ComptessionTest()
+    [DataRow("..\\..\\..\\ToCompress\\Harry Potter and the Sorcerer's Sto.txt")]
+    public void ComptessionTests(string inputfilepath)
     {
-        string inputfilepath = "..\\..\\..\\Harry Potter and the Sorcerer's Sto.txt";
         var encoder = new HuffmanEncoder();
         string input = File.ReadAllText(inputfilepath);
         (byte[] encoded, var codes, uint len) = encoder.Encode(input);
