@@ -23,8 +23,10 @@ namespace DataStructures.Trees
         public void Insert(T value)
         {
             if(Count == 0) Root = new RedBlackTreeNode<T>(false, value);
-            else Root.Insert(value);
-            if(RedBlackTreeNode<T>.IsRed(Root)) Root.FlipColor();
+            else Root = Root.Insert(value);
+
+            if(RedBlackTreeNode<T>.IsRed(Root)) Root.isRed = false;
+
             Count++;
         }
     }

@@ -16,8 +16,7 @@ public class RedBlackTreeTests
             var node = queue.Dequeue();
             if (IsRed(node))
             {
-                if (IsRed(node.Left) || IsRed(node.Right)) 
-                    return true;
+                if (IsRed(node.Left) || IsRed(node.Right)) return true;
             }
             if (node.Left != null)
                 queue.Enqueue(node.Left);
@@ -54,7 +53,7 @@ public class RedBlackTreeTests
         LeftLeaningRedBlackTree<int> tree = new();
         for (int i = 0; i < 1000; i++)
         {
-            tree.Insert(rand.Next(10000));
+            tree.Insert(rand.Next(100000));
         }
         Assert.IsFalse(areRedsTouching(tree));
         Assert.IsTrue(isLeftLeaningOrBalanced(tree));

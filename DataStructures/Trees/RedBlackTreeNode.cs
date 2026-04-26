@@ -8,7 +8,7 @@ namespace DataStructures.Trees
 {
     public class RedBlackTreeNode<T> where T : IComparable<T>
     {
-        public bool isRed { get; private set; }
+        public bool isRed { get; set; }
         public List<T> Values { get; private set; }
         public RedBlackTreeNode<T> Left { get; private set; }
         public RedBlackTreeNode<T> Right { get; private set; }
@@ -31,51 +31,55 @@ namespace DataStructures.Trees
         
         public static RedBlackTreeNode<T> RotateLeft(RedBlackTreeNode<T> node)
         {
-            if (node.isRed) throw new Exception("rotate left was called on a red node, invalid");
             RedBlackTreeNode<T> newNode = node.Right;
             node.Right = newNode.Left;
             newNode.Left = node;
-            newNode.isRed = false;
-            node.isRed = true;
+            bool temp = newNode.isRed;
+            newNode.isRed = node.isRed;
+            node.isRed = temp;
             return newNode;
         }
         
         public static RedBlackTreeNode<T> RotateRight(RedBlackTreeNode<T> node)
         {
-            if (node.isRed) throw new Exception("rotate right was called on a red node, invalid");
             RedBlackTreeNode<T> newNode = node.Left;
             node.Left = newNode.Right;
             newNode.Right = node;
-            newNode.isRed = false;
-            node.isRed = true;
+            bool temp = newNode.isRed;
+            newNode.isRed = node.isRed;
+            node.isRed = temp;
             return newNode;
         }
         
         private RedBlackTreeNode<T> FixUp(RedBlackTreeNode<T> node)
         {
             if (node == null) return null;
-            
-            if (IsRed(node.Right) && !IsRed(node.Left))
-            {
-                node = RotateLeft(node);
-            }
-            
-            if (IsRed(node.Left) && IsRed(node.Left.Left))
-            {
-                node = RotateRight(node);
-            }
-            
+
             if (IsRed(node.Left) && IsRed(node.Right))
             {
                 node.FlipColor();
             }
-            
+
+            if (IsRed(node.Right))
+            {
+                node = RotateLeft(node);
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Left.Left))
+            {
+                node = RotateRight(node);
+            }
+
+            if (IsRed(node.Left) && IsRed(node.Right))
+            {
+                node.FlipColor();
+            }
+
             return node;
         }
         
-        public void Insert(T value)
+        public RedBlackTreeNode<T> Insert(T value)
         {
-            // TODO: Call FixUp on self, not children
             if (value.CompareTo(Values[0]) < 0)
             {
                 if (Left == null)
@@ -84,9 +88,8 @@ namespace DataStructures.Trees
                 }
                 else
                 {
-                    Left.Insert(value);
+                    Left = Left.Insert(value);
                 }
-                Left = FixUp(Left);
             }
             else if (value.CompareTo(Values[0]) > 0)
             {
@@ -96,13 +99,58 @@ namespace DataStructures.Trees
                 }
                 else
                 {
-                    Right.Insert(value);
+                    Right = Right.Insert(value);
                 }
-                Right = FixUp(Right);
             }
             else
             {
                 Values.Add(value);
+                return this;
+            }
+            return FixUp(this);
+        }
+
+        public (bool, RedBlackTreeNode<T>) Remove(T value)
+        {
+            if (value.CompareTo(Values[0]) < 0)
+            {
+                if (Left == null) return (false, this);
+                if (!IsRed(Left) && !IsRed(Left.Left))
+                {
+                    var temp = FixUp(this);
+                    if (temp != this) return temp.Remove(value);
+                }
+                var result = Left.Remove(value);
+                Left = result.Item2;
+                return (result.Item1, FixUp(this));
+            }
+            else if (value.CompareTo(Values[0]) > 0)
+            {
+                if (Right == null) return (false, this);
+                if (!IsRed(Right) && !IsRed(Right.Left))
+                {
+                    var temp = FixUp(this);
+                    if (temp != this) return temp.Remove(value);
+                }
+                var result = Right.Remove(value);
+                Right = result.Item2;
+                return (result.Item1, FixUp(this));
+            }
+            else
+            {
+                if (Values.Count > 1)
+                {
+                    Values.RemoveAt(Values.Count - 1);
+                    return (true, this);
+                }
+                if (Right == null) return (true, Left);
+                RedBlackTreeNode<T> minNode = Right;
+                while (minNode.Left != null)
+                    minNode = minNode.Left;
+                Values[0] = minNode.Values[0];
+                var result = Right.Remove(minNode.Values[0]);
+                Right = result.Item2;
+                return (true, FixUp(this));
             }
         }
     }
