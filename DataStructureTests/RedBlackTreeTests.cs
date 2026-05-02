@@ -41,22 +41,78 @@ public class RedBlackTreeTests
         return true;
     }
     [TestMethod]
-    [DataRow(0)]
-    [DataRow(1)]
-    [DataRow(2)]
-    [DataRow(3)]
-    [DataRow(4)]
-    [DataRow(5)]
+    [DataRow(432729379)]
+    [DataRow(493953605)]
+    [DataRow(279920844)]
+    [DataRow(111516869)]
+    [DataRow(460235788)]
+    [DataRow(528813664)]
     public void InsertTest(int seed)
     {
         Random rand = new(seed);
         LeftLeaningRedBlackTree<int> tree = new();
         for (int i = 0; i < 1000; i++)
         {
-            tree.Insert(rand.Next(100000));
+            tree.Insert(rand.Next());
         }
         Assert.IsFalse(areRedsTouching(tree));
         Assert.IsTrue(isLeftLeaningOrBalanced(tree));
         Assert.IsFalse(tree.Root != null && tree.Root.isRed);
+    }
+    [TestMethod]
+    [DataRow(432729379)]
+    [DataRow(493953605)]
+    [DataRow(279920844)]
+    [DataRow(111516869)]
+    [DataRow(460235788)]
+    [DataRow(528813664)]
+    public void ContainsTest(int seed)
+    {
+        Random rand = new(seed);
+        LeftLeaningRedBlackTree<int> tree = new();
+        List<int> values = new();
+        for (int i = 0; i < 1000; i++)
+        {
+            int toInsert = rand.Next();
+            tree.Insert(toInsert);
+            values.Add(toInsert);
+        }
+        foreach (int n in values)
+        {
+            Assert.IsTrue(tree.Contains(n));
+        }
+    }
+    [TestMethod]
+    [DataRow(432729379)]
+    [DataRow(493953605)]
+    [DataRow(279920844)]
+    [DataRow(111516869)]
+    [DataRow(460235788)]
+    [DataRow(528813664)]
+    public void RemoveTest(int seed)
+    {
+        Random rand = new(seed);
+        LeftLeaningRedBlackTree<int> tree = new();
+        List<int> values = new();
+        for (int i = 0; i < 1000; i++)
+        {
+            int toInsert = rand.Next();
+            tree.Insert(toInsert);
+            values.Add(toInsert);
+        }
+        for(int i = 0; i < 1000; i++)
+        {
+            int toRemove = values[rand.Next(values.Count)];
+            tree.Remove(toRemove);
+            values.Remove(toRemove);
+            Assert.IsFalse(areRedsTouching(tree));
+            Assert.IsTrue(isLeftLeaningOrBalanced(tree));
+            Assert.IsFalse(tree.Root != null && tree.Root.isRed);
+            Assert.AreEqual(tree.Contains(toRemove), values.Contains(toRemove));
+            foreach (int n in values)
+            {
+                Assert.IsTrue(tree.Contains(n));
+            }
+        }
     }
 }

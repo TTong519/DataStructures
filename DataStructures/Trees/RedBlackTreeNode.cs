@@ -153,5 +153,11 @@ namespace DataStructures.Trees
                 return (true, FixUp(this));
             }
         }
+        public bool Contains(T value)
+        {
+            if (Values.Contains(value)) return true;
+            else if (Values[0].CompareTo(value) > 0) return Left != null && Left.Contains(value);
+            else return Right != null && Right.Contains(value);
+        }
     }
 }

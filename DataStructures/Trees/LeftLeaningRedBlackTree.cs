@@ -29,5 +29,18 @@ namespace DataStructures.Trees
 
             Count++;
         }
+        public bool Contains(T value)
+        {
+            if(Root == null) return false;
+            return Root.Contains(value);
+        }
+        public bool Remove(T value)
+        {
+            var returned = Root.Remove(value);
+            Root = returned.Item2;
+            if (RedBlackTreeNode<T>.IsRed(Root)) Root.isRed = false;
+            if (returned.Item1) Count--;
+            return returned.Item1;
+        }
     }
 }
