@@ -159,5 +159,12 @@ namespace DataStructures.Trees
             else if (Values[0].CompareTo(value) > 0) return Left != null && Left.Contains(value);
             else return Right != null && Right.Contains(value);
         }
+        public Queue<RedBlackTreeNode<T>> InOrderTraversal(Queue<RedBlackTreeNode<T>> queue)
+        {
+            if (Left != null) queue = Left.InOrderTraversal(queue);
+            queue.Enqueue(this);
+            if (Right != null) queue = Right.InOrderTraversal(queue);
+            return queue;
+        }
     }
 }

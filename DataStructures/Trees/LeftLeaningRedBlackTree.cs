@@ -42,5 +42,23 @@ namespace DataStructures.Trees
             if (returned.Item1) Count--;
             return returned.Item1;
         }
+        public Queue<RedBlackTreeNode<T>> InOrderTraversal()
+        {
+            Queue<RedBlackTreeNode<T>> queue = new Queue<RedBlackTreeNode<T>>();
+            if (Root != null) return Root.InOrderTraversal(queue);
+            return queue;
+        }
+        public List<T> toList()
+        {
+            var list = new List<T>();
+            Queue<RedBlackTreeNode<T>> orderedNodeQueue = new Queue<RedBlackTreeNode<T>>();
+            orderedNodeQueue = InOrderTraversal();
+            while(orderedNodeQueue.Count > 0)
+            {
+                var node = orderedNodeQueue.Dequeue();
+                list.AddRange(node.Values);
+            }
+            return list;
+        }
     }
 }
