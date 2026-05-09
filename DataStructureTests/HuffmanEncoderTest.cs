@@ -29,8 +29,8 @@ public class HuffmanEncoderTest
     public void ComptessionTests(string inputfilepath)
     {
         var baseDirectory = AppContext.BaseDirectory;
-var     fullPath = Path.Combine(baseDirectory, "..", "..", "..", inputfilepath);
-var     fullPath = Path.GetFullPath(fullPath);
+        var fullPath = Path.Combine(baseDirectory, "..", "..", "..", inputfilepath);
+        fullPath = Path.GetFullPath(fullPath);
         
         var encoder = new HuffmanEncoder();
         string input = File.ReadAllText(fullPath);
