@@ -28,8 +28,9 @@ public class HuffmanEncoderTest
     [DataRow("ToCompress/Harry Potter and the Sorcerer's Sto.txt")]
     public void ComptessionTests(string inputfilepath)
     {
-        var testDirectory = Path.GetDirectoryName(typeof(HuffmanEncoderTest).Assembly.Location) ?? "";
-        var fullPath = Path.Combine(testDirectory, "..", "..", inputfilepath);
+        var baseDirectory = AppContext.BaseDirectory;
+var     fullPath = Path.Combine(baseDirectory, "..", "..", "..", inputfilepath);
+var     fullPath = Path.GetFullPath(fullPath);
         
         var encoder = new HuffmanEncoder();
         string input = File.ReadAllText(fullPath);
