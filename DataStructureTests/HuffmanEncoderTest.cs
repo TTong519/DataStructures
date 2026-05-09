@@ -25,20 +25,22 @@ public class HuffmanEncoderTest
         }
     }
     [TestMethod]
-    [DataRow("..\\..\\..\\ToCompress\\Harry Potter and the Sorcerer's Sto.txt")]
+    [DataRow("ToCompress/Harry Potter and the Sorcerer's Sto.txt")]
     public void ComptessionTests(string inputfilepath)
     {
+        var testDirectory = Path.GetDirectoryName(typeof(HuffmanEncoderTest).Assembly.Location) ?? "";
+        var fullPath = Path.Combine(testDirectory, "..", "..", inputfilepath);
+        
         var encoder = new HuffmanEncoder();
-        string input = File.ReadAllText(inputfilepath);
+        string input = File.ReadAllText(fullPath);
         (byte[] encoded, var codes, uint len) = encoder.Encode(input);
-        string encodedString = "";
         StringBuilder encodedBuilder = new();
         foreach (var b in encoded)
         {
             encodedBuilder.Append(b.ToString("B8"));
         }
-        encodedString = encodedBuilder.ToString();
+        string encodedString = encodedBuilder.ToString();
         string decoded = encoder.Decode(encoded, codes, len);
-        Assert.IsTrue(encodedString.Length < input.Length*8);
+        Assert.IsTrue(encodedString.Length < input.Length * 8);
     }
 }
